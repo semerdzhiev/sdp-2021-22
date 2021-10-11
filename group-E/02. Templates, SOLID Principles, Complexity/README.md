@@ -10,15 +10,22 @@
 [Templates and generic programming](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#t-templates-and-generic-programming)
 ## SOLID принципи
 **S**ingle Responsibility Principle
+
 **O**pen-closed Principle
+
 **L**ishkov Substitution Principle
+
 **I**nterface Segregation Principle
+
 **D**ependency Inversion Principle
 ## Сложност. Нотация big-O. Времена и пространствена сложност
 `O(f) = { g | g ≼ f }`
+
 `g ≼ f` означава, че `g` расте *не по-бързо* от `f`.
 Тоест, `O(f)` е множеството от всички функции, които растат нxе по-бързо от `f`.
+
 Да пишем `g=O(f)` означава същото като `g∈O(f)` и казваме, че `f` е асимптотична горна граница за `g`.
+
 [Big-O Cheat Sheet](https://www.bigocheatsheet.com/)
 
 Има и други нотации - Θ (Big-Theta), Ω (Big Omega), o (Small Oh), ω (Small Omega). Нас най-често ни интересува O нотацията обаче, защото ако `g=O(f)`, то `f` в някакъв смисъл е възможно най-лошото (по големина) **приближение** до `g`.
