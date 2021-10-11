@@ -1,12 +1,16 @@
 # Шаблони, SOLID принципи, Сложност
 
+[Задача за Optional](https://github.com/semerdzhiev/sdp-2021-22/blob/main/group-E/02.%20Templates%2C%20SOLID%20Principles%2C%20Complexity/task.md)
+
+[Запис](https://drive.google.com/file/d/1Z4MAfQUgWzEiPJy0AArdc36TUfM_lA_N/view?usp=sharing)
 ## Шаблони
 - Generic programming - защо?
 - Шаблони в C++
     - функции
     - класове
     - как компилатора на C++ работи с шаблони
-    - `using` vs. `typedef` 
+    - `using` vs. `typedef`
+     
 [Templates and generic programming](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#t-templates-and-generic-programming)
 ## SOLID принципи
 **S**ingle Responsibility Principle
