@@ -6,7 +6,7 @@
 constexpr uint16_t  M   = 3;
 constexpr uint16_t  N   = 4;
 constexpr uint16_t  P   = 5;
-void SumMatrices( const float mat1[][ N ], const float mat2[][ P ])
+void MultiplyMatrices( const float mat1[][ N ], const float mat2[][ P ])
 {
     for ( uint16_t i = 0; i < M; i++ )
     {
