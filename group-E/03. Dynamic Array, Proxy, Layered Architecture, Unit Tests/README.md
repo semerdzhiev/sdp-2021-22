@@ -1,6 +1,6 @@
 # Динамичен Масив, Шаблон за дизайн Proxy, Разделяне на реализацията на слоеве, Unit тестове
 
-<!-- [Запис]() -->
+[Запис](https://drive.google.com/file/d/1L-_iGggMswgsMsEzUAO9XVas1ZdRrh_i/view?usp=sharing)
 
 Проблемът от край на часа беше:
 1. Че имаше `main` при реализацията на масива, а в тестовете имахме `#define CATCH_CONFIG_MAIN`
