@@ -20,8 +20,8 @@ private:
     static constexpr float      GROWTH_FACTOR   = 1.5f;
 
 public:
-    using   iterator        = VecIter< DataType >;
-    using   const_iterator  = VecIter< const DataType >;
+    using   iterator        = VecIter<DataType>;
+    using   const_iterator  = VecIter<const DataType>;
 
     // Big four (and a half?) (five?) + more
 public:
@@ -50,7 +50,7 @@ public:
     // Element access
 public:
     DataType&           at( size_t index );
-    DataType const &    at( size_t index ) const;
+    DataType const&     at( size_t index ) const;
 
     DataType&           operator[]( size_t index );
     DataType const&     operator[]( size_t index ) const;
@@ -103,42 +103,46 @@ public:
     using   value_type          = DataType;
     using   difference_type     = std::ptrdiff_t;
     using   pointer             = DataType*;
+    using   const_pointer       = DataType const*;
     using   reference           = DataType&;
+    using   const_reference     = DataType const&;
+    using   self_type           = VecIter<DataType>;
 
 public:
-                            VecIter( DataType* ptr = nullptr );
-                            VecIter( const VecIter<DataType>& )     = default;
-                            ~VecIter()                              = default;
+                        VecIter( pointer ptr = nullptr );
+                        VecIter( const self_type& )                 = default;
+                        ~VecIter()                                  = default;
 
-    VecIter<DataType>&      operator=( const VecIter<DataType>& )   = default;
-    VecIter<DataType>&      operator=( DataType* ptr );
+    self_type&          operator=( const self_type& )               = default;
+    self_type&          operator=( pointer ptr );
 
-                            operator bool() const;
-                            operator VecIter<DataType const>()           const;
+                        operator bool() const;
+                        operator VecIter<DataType const>()              const;
 
-    bool                    operator==( const VecIter<DataType>& other ) const;
-    bool                    operator!=( const VecIter<DataType>& other ) const;
+    bool                operator==( const self_type& other )            const;
+    bool                operator!=( const self_type& other )            const;
 
-    VecIter<DataType>&      operator+=( const difference_type& movement );
-    VecIter<DataType>&      operator-=( const difference_type& movement );
-    VecIter<DataType>&      operator++();
-    VecIter<DataType>&      operator--();
-    VecIter<DataType>       operator++( int );
-    VecIter<DataType>       operator--( int );
-    VecIter<DataType>       operator+( const difference_type& movement ) const;
-    VecIter<DataType>       operator-( const difference_type& movement ) const;
+    self_type&          operator+=( const difference_type& movement );
+    self_type&          operator-=( const difference_type& movement );
+    self_type&          operator++();
+    self_type&          operator--();
+    self_type           operator++( int );
+    self_type           operator--( int );
+    self_type           operator+( const difference_type& movement )    const;
+    self_type           operator-( const difference_type& movement )    const;
 
-    difference_type         operator-( const VecIter<DataType>& other )  const;
+    difference_type     operator-( const self_type& other )             const;
 
-    DataType&               operator*()             { return *fpData; }
-    DataType const&         operator*()     const   { return *fpData; }
+    reference           operator*()             { return *fpData; }
+    const_reference     operator*()     const   { return *fpData; }
 
-    DataType*               operator->()            { return fpData;  }
-    DataType const*         operator->()    const   { return fpData;  }
+    pointer             operator->()            { return fpData;  }
+    const_pointer       operator->()    const   { return fpData;  }
 
 private:
     pointer     fpData;
 };
+
 
 #include "VecIter.ipp"
 #include "Vector.ipp"

@@ -139,7 +139,7 @@ const DataType&
 Vector<DataType>::at( size_t index ) const
 {
     if ( index >= fSize )
-        throw std::out_of_range( "Vector operator[ " + std::to_string( index ) + " ]: Index out of range!" );
+        throw std::out_of_range( "Vector.at( " + std::to_string( index ) + " ): Index out of range!" );
 
     return fpData[ index ];
 }
