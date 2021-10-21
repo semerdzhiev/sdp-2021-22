@@ -13,6 +13,7 @@ public:
     DynamicArray(size_t);
     DynamicArray(const DynamicArray<Type>&);
     DynamicArray<Type>& operator=(const DynamicArray<Type>&);
+    ~DynamicArray();
 
 public:
     void push_back(const Type&);
