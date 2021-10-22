@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <type_traits>
 
 #ifdef _WIN32
 
@@ -51,7 +52,7 @@ struct Registry {
 };
 
 #define NEW(T, count) Registry<T>::get().allocate(count)
-#define DELETE(T, ptr) Registry<T>::get().deallocate(ptr)
+#define DELETE(ptr) Registry<std::remove_pointer<decltype(ptr)>::type>::get().deallocate(ptr)
 
 template <typename T>
 struct stl_allocator {

@@ -2,7 +2,7 @@
 
 #include "catch.hpp"
 #include "mem_inspect.hpp"
-// #include "vector.hpp"
+#include "vector.hpp"
 
 #include <vector>
 
@@ -24,7 +24,7 @@ struct NumberRange : public Catch::MatcherBase<T> {
 };
 
 template <typename T>
-inline NumberRange<T> IsBetween(T low, T high) {
+NumberRange<T> IsBetween(T low, T high) {
 	return NumberRange<T>(low, high);
 }
 
@@ -84,8 +84,10 @@ int InstanceCounter::instanceCount = 0;
 
 /// If the user did not define USER_VECTOR, run tests on std::vector
 #ifndef USER_VECTOR
+
 template <typename T>
 using vector = std::vector<T, stl_allocator<T>>;
+
 #endif
 
 /// Run all tests once on int, and once on the InstanceCounter
