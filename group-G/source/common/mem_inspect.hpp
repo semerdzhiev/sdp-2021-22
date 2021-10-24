@@ -3,9 +3,10 @@
 #include <unordered_map>
 #include <type_traits>
 
-#ifdef _WIN32
-
+#ifdef _MSC_VER
 #define require(test) ( (test) ? (void)0 : __debugbreak() )
+#else
+#define require(test) assert(test)
 #endif
 
 template <typename T>
@@ -51,8 +52,14 @@ struct Registry {
 	}
 };
 
+template <typename T>
+T removePtr(T *ptr);
+
+#undef DELETE
+#undef NEW
+
 #define NEW(T, count) Registry<T>::get().allocate(count)
-#define DELETE(ptr) Registry<std::remove_pointer<decltype(ptr)>::type>::get().deallocate(ptr)
+#define DELETE(ptr) Registry<decltype(removePtr(ptr))>::get().deallocate(ptr)
 
 template <typename T>
 struct stl_allocator {
