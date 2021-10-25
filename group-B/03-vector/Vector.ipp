@@ -20,7 +20,15 @@ Vector<DataType>::Vector( const std::initializer_list<DataType>& lst )
     , fSize( lst.size() )
     , fCapacity( lst.size() )
 {
-    std::copy( lst.begin(), lst.end(), this->begin() );
+    try
+    {
+        std::copy( lst.begin(), lst.end(), this->begin() );
+    }
+    catch ( ... )
+    {
+        this->clear();
+        throw;
+    }
 }
 
 template<class DataType>
@@ -29,7 +37,15 @@ Vector<DataType>::Vector( const Vector<DataType>& other )
     , fSize( other.fSize )
     , fCapacity( other.fCapacity )
 {
-    std::copy( other.cbegin(), other.cend(), this->begin() );
+    try
+    {
+        std::copy( other.cbegin(), other.cend(), this->begin() );
+    }
+    catch ( ... )
+    {
+        this->clear();
+        throw;
+    }
 }
 
 template<class DataType>
@@ -247,12 +263,20 @@ Vector<DataType>::resize( size_t newSize, const DataType& defaultElem )
     DataType*   pLast       = fpData + fSize;
     if ( newSize < fSize )
         pLast  = fpData + newSize;
-    
-    std::copy( fpData, pLast, pNewData );
-    
-    DataType*   pNewElems   = pNewData + fSize;
-    for ( ; pNewElems < pNewData + newSize; pNewElems++ )
-        *pNewElems  = defaultElem;
+
+    try
+    {
+        std::copy( fpData, pLast, pNewData );
+
+        DataType* pNewElems   = pNewData + fSize;
+        for ( ; pNewElems < pNewData + newSize; pNewElems++ )
+            *pNewElems  = defaultElem;
+    }
+    catch ( ... )
+    {
+        delete[] pNewData;
+        throw;
+    }
 
     delete[] fpData;
     fpData      = pNewData;
@@ -277,7 +301,15 @@ Vector<DataType>::reserve( size_t wantedCapacity )
 
     DataType*   pNewData    = new DataType[ newCapacity ];
 
-    std::copy( fpData, fpData + fSize, pNewData );
+    try
+    {
+        std::copy( fpData, fpData + fSize, pNewData );
+    }
+    catch ( ... )
+    {
+        delete[] pNewData;
+        throw;
+    }
 
     delete[] fpData;
     fpData      = pNewData;
