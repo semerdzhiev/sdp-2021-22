@@ -1,5 +1,7 @@
 # Стек и опашка - видове реализации
 
+[Запис](https://drive.google.com/file/d/1dxhPQ_lq5wzkrdKDxnfk1MlRDdIQ2nHx/view?usp=sharing)
+
 ## Стек
 ### LIFO / FILO 
 (**L**ast **I**n **F**irst **O**ut / **F**irst **I**n **L**ast **O**ut)
