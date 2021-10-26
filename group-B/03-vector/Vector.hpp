@@ -23,6 +23,10 @@ public:
     using   iterator        = VecIter<DataType>;
     using   const_iterator  = VecIter<const DataType>;
 
+    // Important!
+    // const_iterator   <==>   const int*
+    // const_iterator    !=    int* const
+
     // Big four (and a half?) (five?) + more
 public:
                         Vector();
@@ -85,6 +89,21 @@ public:
     iterator            erase( const iterator& posIt );
     iterator            erase( iterator first, iterator last );
 
+    // Tasks
+public:
+    const_iterator      find( const DataType& elem )                    const;
+    Vector<DataType>    reverse()                                       const;
+    bool                isSuperSetOf( const Vector<DataType>& other )   const;
+    Vector<DataType>&   apply( void (*func)(DataType&) );
+
+    template<class Predicate>
+    Vector<DataType>    filter( Predicate pred )                        const;
+
+    const_iterator      findKthLargest( size_t k )                      const;
+
+public:
+    bool                contains( const DataType& elem )                const;
+
     // Private fields
 private:
     DataType*       fpData;
@@ -109,14 +128,14 @@ public:
     using   self_type           = VecIter<DataType>;
 
 public:
-                        VecIter( pointer ptr = nullptr );
+    explicit            VecIter( pointer ptr = nullptr );
                         VecIter( const self_type& )                 = default;
                         ~VecIter()                                  = default;
 
     self_type&          operator=( const self_type& )               = default;
     self_type&          operator=( pointer ptr );
 
-                        operator bool() const;
+    explicit            operator bool()                                 const;
                         operator VecIter<DataType const>()              const;
 
     bool                operator==( const self_type& other )            const;
@@ -146,3 +165,4 @@ private:
 
 #include "VecIter.ipp"
 #include "Vector.ipp"
+#include "VectorTasks.ipp"

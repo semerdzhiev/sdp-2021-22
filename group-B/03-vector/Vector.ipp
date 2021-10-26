@@ -1,3 +1,4 @@
+#pragma once
 #include "Vector.hpp"
 
 template<class DataType>
@@ -360,7 +361,7 @@ template<class DataType>
 typename Vector<DataType>::iterator
 Vector<DataType>::erase( iterator first, iterator last )
 {
-    size_t  resIndex   = first - fpData;
+    size_t  resIndex   = first - iterator( fpData );
 
     for ( ; last != this->end(); last++, first++ )
         std::swap( *first, *last );
@@ -368,6 +369,13 @@ Vector<DataType>::erase( iterator first, iterator last )
     fSize   -= last - first;
 
     return iterator( fpData + resIndex );
+}
+
+template<class DataType>
+bool
+Vector<DataType>::contains( const DataType& elem ) const
+{
+    return this->find( elem ) != this->cend();
 }
 
 template<class DataType>

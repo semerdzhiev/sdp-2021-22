@@ -3,8 +3,133 @@
 #include <cassert>
 #include "Vector.hpp"
 
+Vector<int>     initVecWithPushBack( size_t count = 5 );
+void            testPushBack();
+void            testCtors();
+void            testIter();
+void            testConstness();
+void            testIters();
+void            testRandomAccess();
+
+void            task1Find();
+void            task2Reverse();
+void            task3Superset();
+void            task4Apply();
+void            task5Filter();
+void            task6KthLargest();
+
+
 //------------------------------------------------------------------------------
-Vector<int> initVecWithPushBack(size_t count = 5)
+//------------------------------------------------------------------------------
+int main()
+{
+    //testPushBack();
+    //testCtors();
+    //testIter();
+    //testConstness();
+    //testIters();
+    //testRandomAccess();
+
+    //task1Find();
+    //task2Reverse();
+    //task3Superset();
+    //task4Apply();
+    //task5Filter();
+    task6KthLargest();
+
+    return 0;
+}
+
+
+//------------------------------------------------------------------------------
+void square( int& num )
+{
+    num *= num;
+}
+
+//------------------------------------------------------------------------------
+//--------------------------------- TASK TESTS ---------------------------------
+//------------------------------------------------------------------------------
+void task1Find()
+{
+    Vector<int> vec     = initVecWithPushBack();
+    //std::vector<int>    vec  = { 1, 2, 3, 4, 5 };
+
+    Vector<int>::const_iterator         it      = vec.find( 5 );
+    //std::vector<int>::const_iterator    it     = std::find( vec.cbegin(), vec.cend(), 5 );
+
+    // std::find is from the algorithm library
+    //  to use it -> #include <algorithm>
+
+    if ( it != vec.cend() )
+    {
+        std::cout << *it;
+    }
+    else
+    {
+        std::cout << "not found!";
+    }
+}
+
+//------------------------------------------------------------------------------
+void task2Reverse()
+{
+    Vector<int> vec     = initVecWithPushBack();
+    std::cout << vec << '\n';
+    std::cout << vec.reverse();
+}
+
+//------------------------------------------------------------------------------
+void task3Superset()
+{
+    Vector<int> vec     = { 0, 1, 2, 3, 4, 5 };
+    Vector<int> subVec  = { 0, 5, 1 };
+
+    std::cout << vec.isSuperSetOf( subVec );
+}
+
+//------------------------------------------------------------------------------
+void task4Apply()
+{
+    Vector<int>         vec     = { 0, 1, 2, 3, 4, 5 };
+
+    vec.apply( square );
+
+    std::cout << vec;
+}
+
+//------------------------------------------------------------------------------
+void task5Filter()
+{
+    Vector<int>         vec     = { 0, 1, 2, 3, 4, 5 };
+
+    // Lambda function / Anonymous function
+    // [ captures ] ( params ) -> return_type { body }
+
+    std::cout << vec.filter( [] ( int num ) { return num % 2 == 0; } );
+}
+
+
+void task6KthLargest()
+{
+    Vector<int>         vec     = { 4, 2, 6, 10, 13, 0, -2 };
+
+    Vector<int>::const_iterator it  = vec.findKthLargest( 2 );
+    if ( it != vec.end() )
+    {
+        std::cout << *it;
+    }
+    else
+    {
+        std::cout << "No such element";
+    }
+}
+
+
+//------------------------------------------------------------------------------
+//---------------------------- IMPLEMENTATION TESTS ----------------------------
+//------------------------------------------------------------------------------
+Vector<int> initVecWithPushBack( size_t count )
 {
     Vector<int> vec;
     for ( size_t i = 1; i <= count; i++ )
@@ -221,19 +346,4 @@ void testRandomAccess()
     {
         std::cout << e.what() << "\n";
     }
-}
-
-
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-int main()
-{
-    testPushBack();
-    testCtors();
-    testIter();
-    testConstness();
-    testIters();
-    testRandomAccess();
-
-    return 0;
 }
