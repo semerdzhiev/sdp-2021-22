@@ -449,3 +449,5 @@ FodyWeavers.xsd
 *_sample.hpp
 *_sample.cpp
 *_sample.h
+*.vcxproj.filters
+
