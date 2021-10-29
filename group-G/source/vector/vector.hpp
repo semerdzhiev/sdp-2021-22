@@ -22,7 +22,11 @@ inline void test_allocation() {
 	DELETE(arr);
 }
 
+#ifdef USER_VECTOR
+
 template <typename T>
 struct vector {
 	// Implement me
 };
+
+#endif
