@@ -103,4 +103,12 @@ struct stl_allocator {
 	void deallocate(T *ptr) const {
 		return Registry<T>::get().deallocate(ptr);
 	}
+
+	bool operator==(const stl_allocator &) const {
+		return true;
+	}
+
+	bool operator!=(const stl_allocator &) const {
+		return false;
+	}
 };
