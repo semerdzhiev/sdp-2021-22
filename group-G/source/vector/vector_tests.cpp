@@ -131,8 +131,8 @@ TEMPLATE_TEST_CASE("Vector create/destroy", "[vector][lifetime]", TEST_TYPES) {
 			CHECK_THAT(instance.capacity(), IsBetween(17, 32));
 			CHECK_THAT(memory.allocatedObjectCount, IsBetween(17, 32));
 
-			REQUIRE(instance.at(3) == TestType(5));
-			REQUIRE(instance.at(7) == instance.at(3));
+			REQUIRE(instance.front() == TestType(5));
+			REQUIRE(instance.back() == TestType(5));
 		}
 		REQUIRE_FALSE(memory.hasLeakedMemory());
 		REQUIRE(InstanceCounter::instanceCount == 0);
