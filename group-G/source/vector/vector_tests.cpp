@@ -126,10 +126,13 @@ TEMPLATE_TEST_CASE("Vector create/destroy", "[vector][lifetime]", TEST_TYPES) {
 
 	SECTION("Constructor with count and value") {
 		{
-			vector<TestType> instance(17, TestType());
+			vector<TestType> instance(17, TestType(5));
 			REQUIRE(instance.size() == 17);
 			CHECK_THAT(instance.capacity(), IsBetween(17, 32));
 			CHECK_THAT(memory.allocatedObjectCount, IsBetween(17, 32));
+
+			REQUIRE(instance.at(3) == TestType(5));
+			REQUIRE(instance.at(7) == instance.at(3));
 		}
 		REQUIRE_FALSE(memory.hasLeakedMemory());
 		REQUIRE(InstanceCounter::instanceCount == 0);
