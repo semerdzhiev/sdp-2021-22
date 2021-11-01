@@ -15,7 +15,7 @@ private:
 private:
 	// fields of the bitset
 	ContainerType* data;
-	const int bitCount;
+	int bitCount;
 public:
 	StaticBitset(int bitCount, bool value)
 		: data(new ContainerType[getCountOfContainerType(bitCount)])
@@ -30,7 +30,6 @@ public:
 		if (value) {
 			// set *all* bits to 1
 			memset(data, 0b11111111, getCountOfContainerType(bitCount) * containerTypeBytesSize);
-			// relying on the fact we are in two's complement
 		}
 		else {
 			// set *all* bits to 0
@@ -44,6 +43,7 @@ public:
 	{
 		for (size_t i = 0; i < getCountOfContainerType(other.bitCount); ++i)
 		{
+			// no concerns as Container type is integral => trivially (operator=)-able
 			data[i] = other.data[i];
 		}
 	}
@@ -55,15 +55,18 @@ public:
 
 	StaticBitset& operator=(const StaticBitset& other)
 	{
-		if (bitCount != other.bitCount)
+		// if the next line throws we are better off to leave it and pass it up
+		ContainerType* newData = new ContainerType[getCountOfContainerType(other.bitCount)];
+
+		for (size_t i = 0; i < getCountOfContainerType(other.bitCount); ++i)
 		{
-			throw std::exception("Attempting to assign static bitsets of different arity. Cannot do that as it is ambiguous which bits to copy - least significant or most significant");
+			// no concerns as Container type is integral => trivially (operator=)-able
+			newData[i] = other.data[i];
 		}
 
-		for (size_t i = 0; i < getCountOfContainerType(bitCount); ++i)
-		{
-			data[i] = other.data[i];
-		}
+		delete[] data;
+		data = newData;
+		bitCount = other.bitCount;
 	}
 
 	// All named functions throw on error
@@ -204,7 +207,7 @@ private:
 	constexpr static ContainerType getMaskForIdx(size_t bitIndex)
 	{
 		assert(bitIndex <= containerTypeBitsSize && "Cannot mask outside the bits of the container type!");
-		return 1 << bitIndex;
+		return ContainerType(1) << bitIndex;
 	}
 
 	struct IndexingPair
