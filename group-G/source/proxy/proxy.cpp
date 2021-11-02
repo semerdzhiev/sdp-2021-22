@@ -183,7 +183,7 @@ public:
 	/// Read/write access to a specific bit in the set
 	proxy operator[](int index) {
 		assert(0 <= index && index < bitCount && "The index has to be inside the bitfield");
-		return proxy{ this, index };
+		return proxy(this, index);
 	}
 
 	/// Const overload, read only access
