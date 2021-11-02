@@ -199,17 +199,33 @@ public:
 		return data[idxPair.containerTypeIndex] & idxPair.getMask();
 	}
 private:
-	static size_t getCountOfContainerType(int bitCount)
+	// Returns the least amount of container types
+	// that will have enough bits to contain the bit count
+	constexpr static size_t getCountOfContainerType(int bitCount)
 	{
 		return (bitCount + containerTypeBitsSize - bitCount % containerTypeBytesSize) / containerTypeBitsSize;
 	}
 
+	// Returns a mask for the bit at the supplied index
+	// Asserts that the index is strictly-less than
+	// the bit count of the container type
+	// E.g.
+	// index == 0 => 0b1
+	// index == 1 => 0b10
+	// index == 2 => 0b100
+	// etc
 	constexpr static ContainerType getMaskForIdx(size_t bitIndex)
 	{
-		assert(bitIndex <= containerTypeBitsSize && "Cannot mask outside the bits of the container type!");
+		assert(bitIndex < containerTypeBitsSize && "Cannot mask outside the bits of the container type!");
 		return ContainerType(1) << bitIndex;
 	}
 
+	// A structure analogous to std::pair<size_t, size_t>
+	// but with named fields
+	// Represents the indeces
+	// in the container type array that we have to access
+	// as well as the bit index inside the memory of the container type
+	// Can produce masks for the bit index
 	struct IndexingPair
 	{
 		const size_t containerTypeIndex;
@@ -219,9 +235,10 @@ private:
 		ContainerType getMaskInverted() const { return ~getMask(); }
 	};
 
-	static IndexingPair getIndexingPairForBitIndex(int idx)
+	// Returns the indexing pair for the given bit index
+	constexpr static IndexingPair getIndexingPairForBitIndex(int bitIdx)
 	{
-		return IndexingPair{ idx / containerTypeBitsSize, idx % containerTypeBitsSize };
+		return IndexingPair{ bitIdx / containerTypeBitsSize, bitIdx % containerTypeBitsSize };
 	}
 
 };
