@@ -36,11 +36,13 @@ public:
 		: data(new ContainerType[getCountOfContainerType(other.bitCount)])
 		, bitCount(other.bitCount)
 	{
-		for (size_t i = 0; i < getCountOfContainerType(other.bitCount); ++i)
-		{
-			// no concerns as Container type is integral => trivially (operator=)-able
-			data[i] = other.data[i];
-		}
+		memcpy(data, other.data, getCountOfContainerType(other.bitCount));
+		// Equivalent to:
+		//for (size_t i = 0; i < getCountOfContainerType(other.bitCount); ++i)
+		//{
+		//	// no concerns as Container type is integral => trivially (operator=)-able
+		//	data[i] = other.data[i];
+		//}
 	}
 
 	~StaticBitset()
@@ -53,11 +55,13 @@ public:
 		// if the next line throws we are better off to leave it and pass it up
 		ContainerType* newData = new ContainerType[getCountOfContainerType(other.bitCount)];
 
-		for (size_t i = 0; i < getCountOfContainerType(other.bitCount); ++i)
-		{
-			// no concerns as Container type is integral => trivially (operator=)-able
-			newData[i] = other.data[i];
-		}
+		memcpy(data, other.data, getCountOfContainerType(other.bitCount));
+		// Equivalent to:
+		//for (size_t i = 0; i < getCountOfContainerType(other.bitCount); ++i)
+		//{
+		//	// no concerns as Container type is integral => trivially (operator=)-able
+		//	data[i] = other.data[i];
+		//}
 
 		delete[] data;
 		data = newData;
