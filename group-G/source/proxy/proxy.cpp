@@ -11,6 +11,7 @@ private:
 	constexpr static size_t containerTypeBytesSize = sizeof(ContainerType);
 	constexpr static size_t containerTypeBitsSize = containerTypeBytesSize * 8;
 	static_assert(std::is_integral_v<ContainerType>, "The container type must be integral!");
+	static_assert(std::is_unsigned_v<ContainerType>, "The container type must be unsigned!");
 
 private:
 	// fields of the bitset
