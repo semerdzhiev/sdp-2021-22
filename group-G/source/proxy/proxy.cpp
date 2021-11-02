@@ -22,12 +22,6 @@ public:
 		: data(new ContainerType[getCountOfContainerType(bitCount)])
 		, bitCount(bitCount) {
 
-		if (bitCount == 0)
-		{
-			delete[] data;
-			throw std::exception("A static bitset cannot be initialized with a count of zero(doesn't make sense)!");
-		}
-
 		if (value) {
 			// set *all* bits to 1
 			memset(data, 0b11111111, getCountOfContainerType(bitCount) * containerTypeBytesSize);
@@ -230,6 +224,16 @@ private:
 int main() {
 	StaticBitset v(1000, false);
 	StaticBitset v2(33, false);
+	StaticBitset v3(0, false);
+
+	try {
+		v3.set(0);
+		return 1; // should not get here
+	}
+	catch (...)
+	{
+		// should catch
+	}
 
 	v2.set(0);
 	v2.set(1);
