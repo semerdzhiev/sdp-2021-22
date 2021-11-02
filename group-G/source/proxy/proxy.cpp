@@ -66,6 +66,7 @@ public:
 		delete[] data;
 		data = newData;
 		bitCount = other.bitCount;
+		return *this;
 	}
 
 	// All named functions throw on error
