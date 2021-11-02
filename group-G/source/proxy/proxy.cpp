@@ -106,9 +106,7 @@ public:
 		{
 			throw std::out_of_range("Access outside bitfield");
 		}
-
-		const IndexingPair idxPair = getIndexingPairForBitIndex(index);
-		return data[idxPair.containerTypeIndex] & idxPair.getMask();
+		return this->operator[](index);
 	}
 
 	/// Get number of bits
@@ -191,7 +189,9 @@ public:
 	/// Const overload, read only access
 	bool operator[](int index) const {
 		assert(0 <= index && index < bitCount && "The index has to be inside the bitfield");
-		return get(index);
+
+		const IndexingPair idxPair = getIndexingPairForBitIndex(index);
+		return data[idxPair.containerTypeIndex] & idxPair.getMask();
 	}
 private:
 	static size_t getCountOfContainerType(int bitCount)
