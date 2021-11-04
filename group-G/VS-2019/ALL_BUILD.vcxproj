@@ -170,6 +170,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
+    <ProjectReference Include="C:\src\sdp-2021-22\group-G\VS-2019\proxy\Proxy.vcxproj">
+      <Project>{916254A0-FB7E-38C7-82F0-F75C139EA516}</Project>
+      <Name>Proxy</Name>
+    </ProjectReference>
     <ProjectReference Include="C:\src\sdp-2021-22\group-G\VS-2019\vector\VectorTest.vcxproj">
       <Project>{C245215D-FA6C-3295-935A-5ADEAF6F0AE0}</Project>
       <Name>VectorTest</Name>

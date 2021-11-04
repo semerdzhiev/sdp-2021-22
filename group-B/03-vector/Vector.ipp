@@ -1,3 +1,4 @@
+#pragma once
 #include "Vector.hpp"
 
 template<class DataType>
@@ -20,7 +21,15 @@ Vector<DataType>::Vector( const std::initializer_list<DataType>& lst )
     , fSize( lst.size() )
     , fCapacity( lst.size() )
 {
-    std::copy( lst.begin(), lst.end(), this->begin() );
+    try
+    {
+        std::copy( lst.begin(), lst.end(), this->begin() );
+    }
+    catch ( ... )
+    {
+        this->clear();
+        throw;
+    }
 }
 
 template<class DataType>
@@ -29,7 +38,15 @@ Vector<DataType>::Vector( const Vector<DataType>& other )
     , fSize( other.fSize )
     , fCapacity( other.fCapacity )
 {
-    std::copy( other.cbegin(), other.cend(), this->begin() );
+    try
+    {
+        std::copy( other.cbegin(), other.cend(), this->begin() );
+    }
+    catch ( ... )
+    {
+        this->clear();
+        throw;
+    }
 }
 
 template<class DataType>
@@ -247,12 +264,20 @@ Vector<DataType>::resize( size_t newSize, const DataType& defaultElem )
     DataType*   pLast       = fpData + fSize;
     if ( newSize < fSize )
         pLast  = fpData + newSize;
-    
-    std::copy( fpData, pLast, pNewData );
-    
-    DataType*   pNewElems   = pNewData + fSize;
-    for ( ; pNewElems < pNewData + newSize; pNewElems++ )
-        *pNewElems  = defaultElem;
+
+    try
+    {
+        std::copy( fpData, pLast, pNewData );
+
+        DataType* pNewElems   = pNewData + fSize;
+        for ( ; pNewElems < pNewData + newSize; pNewElems++ )
+            *pNewElems  = defaultElem;
+    }
+    catch ( ... )
+    {
+        delete[] pNewData;
+        throw;
+    }
 
     delete[] fpData;
     fpData      = pNewData;
@@ -277,7 +302,15 @@ Vector<DataType>::reserve( size_t wantedCapacity )
 
     DataType*   pNewData    = new DataType[ newCapacity ];
 
-    std::copy( fpData, fpData + fSize, pNewData );
+    try
+    {
+        std::copy( fpData, fpData + fSize, pNewData );
+    }
+    catch ( ... )
+    {
+        delete[] pNewData;
+        throw;
+    }
 
     delete[] fpData;
     fpData      = pNewData;
@@ -328,7 +361,7 @@ template<class DataType>
 typename Vector<DataType>::iterator
 Vector<DataType>::erase( iterator first, iterator last )
 {
-    size_t  resIndex   = first - fpData;
+    size_t  resIndex   = first - iterator( fpData );
 
     for ( ; last != this->end(); last++, first++ )
         std::swap( *first, *last );
@@ -336,6 +369,13 @@ Vector<DataType>::erase( iterator first, iterator last )
     fSize   -= last - first;
 
     return iterator( fpData + resIndex );
+}
+
+template<class DataType>
+bool
+Vector<DataType>::contains( const DataType& elem ) const
+{
+    return this->find( elem ) != this->cend();
 }
 
 template<class DataType>
