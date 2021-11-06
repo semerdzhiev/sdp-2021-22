@@ -1,6 +1,5 @@
 #pragma once
 
-#include "optional.hpp"
 #include <stdexcept>
 
 template <class T>
