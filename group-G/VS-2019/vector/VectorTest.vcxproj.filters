@@ -12,6 +12,9 @@
     <ClInclude Include="C:\src\sdp-2021-22\group-G\source\common\mem_inspect.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="C:\src\sdp-2021-22\group-G\source\common\type_traits.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="C:\src\sdp-2021-22\group-G\source\vector\vector.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

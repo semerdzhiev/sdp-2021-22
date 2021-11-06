@@ -315,6 +315,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   <ItemGroup>
     <ClInclude Include="C:\src\sdp-2021-22\group-G\source\common\catch.hpp" />
     <ClInclude Include="C:\src\sdp-2021-22\group-G\source\common\mem_inspect.hpp" />
+    <ClInclude Include="C:\src\sdp-2021-22\group-G\source\common\type_traits.hpp" />
     <ClCompile Include="C:\src\sdp-2021-22\group-G\source\vector\vector_tests.cpp" />
     <ClInclude Include="C:\src\sdp-2021-22\group-G\source\vector\vector.hpp" />
   </ItemGroup>
