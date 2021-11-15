@@ -1,0 +1,1 @@
+Решението на Задача 3 можете да намерите [тук](https://github.com/semerdzhiev/sdp-2021-22/blob/main/group-B/06-forward-list/solutions/00-round-table-knights.cpp).
