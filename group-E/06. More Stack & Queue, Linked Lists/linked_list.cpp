@@ -87,15 +87,14 @@ public:
             last = nullptr;
             return;
         }
-        node<T> *last_cpy = last;
         node<T> *current = first;
         while (current->next_element_ptr != last)
         {
             current = current->next_element_ptr;
         }
         current->next_element_ptr = nullptr;
+        delete last;
         last = current;
-        delete last_cpy;
     }
 
     void print()
