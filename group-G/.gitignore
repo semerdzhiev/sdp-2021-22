@@ -450,4 +450,4 @@ FodyWeavers.xsd
 *_sample.cpp
 *_sample.h
 *.vcxproj.filters
-
+build_*/
