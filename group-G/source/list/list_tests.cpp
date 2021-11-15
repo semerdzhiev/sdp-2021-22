@@ -17,8 +17,21 @@ template <typename T>
 using TestList = std::list<T, stl_allocator<T>>;
 
 // std::list's Node is this for MSVC
+#ifdef __MINGW32__
+
+template <typename T>
+using ListNode = std::_List_node<T>;
+
+
+#elif _MSC_VER
+
 template <typename T>
 using ListNode = std::_List_node<T, typename std::allocator_traits<stl_allocator<T>>::void_pointer>;
+
+#else
+#error "Unknown compiler, ask for support for it"
+#endif
+
 
 #else
 

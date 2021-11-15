@@ -7,12 +7,14 @@
 #include <list>
 
 #ifdef _MSC_VER
-#define require(test) ( (test) ? (void)0 : __debugbreak() )
+#define massert(test) ( (test) ? (void)0 : __debugbreak() )
 #else
-#define require(test) assert(test)
+#define massert(test) assert(test)
 #endif
 
 
+/// Registry used to track all allocations and deallocations, used after scopes to ensure all memory is deallocated
+/// Singleton by the template type
 template <typename T>
 struct Registry {
 	typedef std::unordered_map<T *, int> MemSize;
@@ -20,29 +22,42 @@ struct Registry {
 	int allocatedObjectCount = 0;
 	int allocateCalls = 0;
 
+	/// Check if there is any allocation pointers left in the registry
 	bool hasLeakedMemory() const {
 		return !allocations.empty();
 	}
 
+	/// Get the number of objects allocated for a given pointer, returns -1 if not found
+	int getCountFor(T *ptr) const {
+		typename MemSize::const_iterator it = allocations.find(ptr);
+		if (it == allocations.end()) {
+			return -1;
+		}
+		return it->second;
+	}
+
+	/// Add pointer with count to the registry
 	void add(T *ptr, int count) {
 		allocatedObjectCount += count;
 		allocations.insert(std::make_pair(ptr, count));
 		++allocateCalls;
 	}
 
+	/// Remove a pointer from the registry, asserts on pointers not previously added to registry
 	void remove(T* ptr) {
 		if (!ptr) {
 			return;
 		}
 		typename MemSize::iterator iter = allocations.find(ptr);
 		const bool validPtr = iter != allocations.end();
-		require(validPtr && "Deallocating invalid pointer");
+		massert(validPtr && "Deallocating invalid pointer");
 		if (validPtr) {
 			allocatedObjectCount -= iter->second;
 			allocations.erase(iter);
 		}
 	}
 
+	/// Reset the allocation calls counter
 	void reset() {
 		allocateCalls = 0;
 	}
@@ -53,15 +68,7 @@ struct Registry {
 	}
 };
 
-template <typename T>
-T removePtr(T *ptr);
-
-#undef DELETE
-#undef NEW
-
-#define NEW(T, count) Registry<T>::get().allocate(count)
-#define DELETE(ptr) Registry<decltype(removePtr(ptr))>::get().deallocate(ptr)
-
+/// Bare minimum implementation of the STL allocator used to proxy calls to the Registry
 template <typename T>
 struct stl_allocator {
 	typedef T value_type;
@@ -111,6 +118,27 @@ struct stl_allocator {
 		return false;
 	}
 };
+
+
+template <typename T>
+T removePtr(T *ptr);
+
+#undef DELETE
+#undef NEW
+
+#define NEW(T, count) stl_allocator<T>().allocate(count)
+
+template <typename T>
+void DELETE(T *ptr) {
+	if (!ptr) {
+		return;
+	}
+	const int count = Registry<T>::get().getCountFor(ptr);
+	if (count == -1) {
+		massert(count >= 0 && "Deallocation of invalid pointer");
+	}
+	stl_allocator<T>().deallocate(ptr, count);
+}
 
 
 /// Object that counts the number of instances of itself
