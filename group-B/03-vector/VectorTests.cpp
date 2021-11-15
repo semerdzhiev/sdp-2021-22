@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <string>
 #include <cassert>
+#include <stack>
 #include "Vector.hpp"
 
 Vector<int>     initVecWithPushBack( size_t count = 5 );
@@ -17,7 +18,6 @@ void            task3Superset();
 void            task4Apply();
 void            task5Filter();
 void            task6KthLargest();
-
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -93,9 +93,7 @@ void task4Apply()
 {
     Vector<int>         vec     = { 0, 1, 2, 3, 4, 5 };
 
-    vec.apply( square );
-
-    std::cout << vec;
+    std::cout << vec.apply( square );
 }
 
 //------------------------------------------------------------------------------

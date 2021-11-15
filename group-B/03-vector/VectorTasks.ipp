@@ -37,7 +37,7 @@ Vector<DataType>::isSuperSetOf( const Vector<DataType>& other ) const
 }
 
 template<class DataType>
-Vector<DataType>&       // Why Vector<DataType>& instead of void?
+Vector<DataType>&
 Vector<DataType>::apply( void (*func)(DataType&) )
 {
     for ( DataType& elem : *this )
@@ -60,14 +60,26 @@ Vector<DataType>::filter( Predicate pred ) const
     return res;
 }
 
-template<class DataType>                    // How can we return iterator
-typename Vector<DataType>::const_iterator   // instead of const_iterator?
+template<class DataType>
+typename Vector<DataType>::iterator
+Vector<DataType>::findKthLargest( size_t k )
+{
+    int diff = std::as_const( *this ).findKthLargest( k ) - this->begin();
+
+    return iterator( this->begin() + diff );
+}
+
+template<class DataType>
+typename Vector<DataType>::const_iterator
 Vector<DataType>::findKthLargest( size_t k ) const
 {
-    Vector<DataType>    temp( *this );      // Can we avoid copying?
+    if ( k >= this->size() )
+        return this->end();
 
-    for ( size_t i = 0; i < k; i++ )        // What would happend if we pass k
-    {                                       // that is larger than this->size()?
+    Vector<DataType>    temp( *this );
+
+    for ( size_t i = 0; i < k; i++ )
+    {
         size_t  maxIndex    = i;
         for ( size_t j = i; j < this->size(); j++ )
             if ( temp[ j ] > temp[ maxIndex ] )
@@ -80,4 +92,24 @@ Vector<DataType>::findKthLargest( size_t k ) const
     const DataType&     kthLargest  = temp[ k - 1 ];
 
     return this->find( kthLargest );
+}
+
+template<class DataType>
+Vector<DataType>
+Vector<DataType>::unique() const
+{
+    Vector<DataType>    temp( *this );
+
+    std::sort( temp.begin(), temp.end() );
+
+    for ( size_t i = 0; i < temp.size() - 1; i++ )
+    {
+        if ( temp[ i ] == temp[ i + 1 ] )
+        {
+            temp.erase( temp.begin() + i + 1 );
+            i--;
+        }
+    }
+
+    return temp;
 }
