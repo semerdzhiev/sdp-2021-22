@@ -6,7 +6,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\src\sdp-2021-22\group-G\source\common\catch.hpp">
+    <ClInclude Include="C:\src\sdp-2021-22\group-G\source\common\catch_utils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\src\sdp-2021-22\group-G\source\common\mem_inspect.hpp">

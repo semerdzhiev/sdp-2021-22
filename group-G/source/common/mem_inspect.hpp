@@ -3,11 +3,15 @@
 #include <unordered_map>
 #include <type_traits>
 
+#include <vector>
+#include <list>
+
 #ifdef _MSC_VER
 #define require(test) ( (test) ? (void)0 : __debugbreak() )
 #else
 #define require(test) assert(test)
 #endif
+
 
 template <typename T>
 struct Registry {
@@ -20,15 +24,13 @@ struct Registry {
 		return !allocations.empty();
 	}
 
-	T *allocate(int count) {
-		T *ptr = new T[count];
+	void add(T *ptr, int count) {
 		allocatedObjectCount += count;
 		allocations.insert(std::make_pair(ptr, count));
 		++allocateCalls;
-		return ptr;
 	}
 
-	void deallocate(T *ptr) {
+	void remove(T* ptr) {
 		if (!ptr) {
 			return;
 		}
@@ -39,7 +41,6 @@ struct Registry {
 			allocatedObjectCount -= iter->second;
 			allocations.erase(iter);
 		}
-		delete[] ptr;
 	}
 
 	void reset() {
@@ -87,21 +88,19 @@ struct stl_allocator {
 	template <class U>
 	constexpr stl_allocator(const stl_allocator<U> &) {}
 
-
 	pointer allocate(size_type n, const void *) const {
 		return allocate(n);
 	}
 
 	pointer allocate(size_type n) const {
-		return Registry<T>::get().allocate(n);
+		pointer ptr = std::allocator<T>().allocate(n);
+		Registry<T>::get().add(ptr, n);
+		return ptr;
 	}
 
-	void deallocate(T *ptr, std::size_t) const {
-		deallocate(ptr);
-	}
-
-	void deallocate(T *ptr) const {
-		return Registry<T>::get().deallocate(ptr);
+	void deallocate(T *ptr, std::size_t count) const {
+		Registry<T>::get().remove(ptr);
+		std::allocator<T>().deallocate(ptr, count);
 	}
 
 	bool operator==(const stl_allocator &) const {
@@ -112,3 +111,64 @@ struct stl_allocator {
 		return false;
 	}
 };
+
+
+/// Object that counts the number of instances of itself
+/// Used to verify vector allocates and deallocates
+struct InstanceCounter {
+	int value = 0; ///< Some value to enable comparisons and different values
+	static int instanceCount; ///< The counter for the instances
+
+	static void incref() {
+		++instanceCount;
+	}
+
+	static void decref() {
+		--instanceCount;
+	}
+
+	InstanceCounter() {
+		incref();
+	}
+
+	InstanceCounter(int value)
+		: value(value) {
+		incref();
+	}
+
+	~InstanceCounter() {
+		decref();
+	}
+
+	InstanceCounter(const InstanceCounter &other)
+		: value(other.value) {
+		incref();
+	}
+
+	InstanceCounter(InstanceCounter &&other)
+		: value(other.value) {
+		incref();
+	}
+
+	InstanceCounter &operator=(const InstanceCounter &other) = default;
+	InstanceCounter &operator=(InstanceCounter &&other) = default;
+
+	InstanceCounter &operator++() {
+		++value;
+		return *this;
+	}
+
+	bool operator==(const InstanceCounter &other) const {
+		return value == other.value;
+	}
+
+	bool operator<=(const InstanceCounter &other) const {
+		return value <= other.value;
+	}
+
+	bool operator<(const InstanceCounter &other) const {
+		return value < other.value;
+	}
+};
+
+int InstanceCounter::instanceCount = 0;

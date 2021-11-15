@@ -1,86 +1,10 @@
 #define CATCH_CONFIG_MAIN
 
-#include "catch.hpp"
+#include "catch_utils.hpp"
 #include "mem_inspect.hpp"
 #include "vector.hpp"
 
 #include <vector>
-
-/// Utility for matching values in range for catch
-template <typename T>
-struct NumberRange : public Catch::MatcherBase<T> {
-	T low, high;
-	NumberRange(T low, T high) : low(low), high(high) {}
-
-	bool match(const T & i) const override {
-		return i >= low && i <= high;
-	}
-
-	std::string describe() const override {
-		std::ostringstream ss;
-		ss << "is between " << low << " and " << high;
-		return ss.str();
-	}
-};
-
-template <typename T>
-NumberRange<T> IsBetween(T low, T high) {
-	return NumberRange<T>(low, high);
-}
-
-
-/// Object that counts the number of instances of itself
-/// Used to verify vector allocates and deallocates
-struct InstanceCounter {
-	int value = 0; ///< Some value to enable comparisons and different values
-	static int instanceCount; ///< The counter for the instances
-
-	static void incref() {
-		++instanceCount;
-	}
-
-	static void decref() {
-		--instanceCount;
-	}
-
-	InstanceCounter() {
-		incref();
-	}
-
-	InstanceCounter(int value)
-		: value(value) {
-		incref();
-	}
-
-	~InstanceCounter() {
-		decref();
-	}
-
-	InstanceCounter(const InstanceCounter &other)
-		: value(other.value) {
-		incref();
-	}
-
-	InstanceCounter(InstanceCounter &&other)
-		: value(other.value) {
-		incref();
-	}
-
-	InstanceCounter &operator=(const InstanceCounter &other) = default;
-	InstanceCounter &operator=(InstanceCounter &&other) = default;
-
-	InstanceCounter &operator++() {
-		++value;
-		return *this;
-	}
-
-	bool operator==(const InstanceCounter &other) const {
-		return value == other.value;
-	}
-};
-
-int InstanceCounter::instanceCount = 0;
-
 
 /// If the user did not define USER_VECTOR, run tests on std::vector
 #ifndef USER_VECTOR

@@ -1,12 +1,12 @@
-project(VectorTest)
+project(ListTestS)
 
 set(SOURCES
 	../common/catch_utils.hpp
 	../common/mem_inspect.hpp
 	../common/type_traits.hpp
 
-	vector_tests.cpp
-	vector.hpp
+	list_tests.cpp
+	list.hpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
