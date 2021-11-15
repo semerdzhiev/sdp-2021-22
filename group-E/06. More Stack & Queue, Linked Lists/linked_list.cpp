@@ -109,6 +109,33 @@ public:
         std::cout << std::endl;
     }
 
+        // NB linear operation
+    const T &operator[](size_t index) const
+    {
+        auto current = first;
+        for (size_t id = 0; id < index; id++)
+        {
+            current = current->next_element_ptr;
+        }
+        return current->value;
+    }
+    // inserts value on index
+    // NB linear operation
+    void insert(size_t index, const T &value)
+    {
+        node<T> *new_node = new node<T>();
+        new_node->value = value;
+        auto current = first;
+        for (size_t id = 0; id < index - 1; id++)
+        {
+            current = current->next_element_ptr;
+        }
+        auto prev_element_ptr = current;
+        auto next_element_ptr = current->next_element_ptr;
+        prev_element_ptr->next_element_ptr = new_node;
+        new_node->next_element_ptr = next_element_ptr;
+    }
+
 private:
     node<T> *first{};
     node<T> *last{};
