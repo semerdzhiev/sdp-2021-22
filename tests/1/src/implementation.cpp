@@ -7,18 +7,26 @@ struct MyStore : Store {
 		actionHandler = handler;
 	}
 
-	void init(int workerCount, int startFood, int startWater) override {
+	void init(int workerCount, int startBanana, int startSchweppes) override {
 		
 	}
 
-	void newClient(int food, int water, int maxWaitTime) override {
+	void addClients(const Client *clients, int count) override {
 		
 	}
 
 	void advanceTo(int minute) override {
-		actionHandler->onWorkerSend(0, ResourceType::food);
-		actionHandler->onWorkerBack(0, ResourceType::water);
+		actionHandler->onWorkerSend(0, ResourceType::banana);
+		actionHandler->onWorkerBack(0, ResourceType::schweppes);
 		actionHandler->onClientDepart(0, 0, 1, 2);
+	}
+
+	virtual int getBanana() const {
+		return 0;
+	}
+
+	virtual int getSchweppes() const {
+		return 0;
 	}
 };
 
