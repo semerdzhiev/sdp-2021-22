@@ -1,5 +1,7 @@
 # Свързани списъци, Итератор, Адаптер
 
+[Запис](https://drive.google.com/file/d/11h32ISF6kMWq-9ZBQAbQKswE3LVXeHXE/view?usp=sharing)
+
 ## Двусвързан списък
 <img src="https://media.geeksforgeeks.org/wp-content/cdn-uploads/gq/2014/03/DLL1.png" alt="circular-double-linked-list" width="400"/>
 
