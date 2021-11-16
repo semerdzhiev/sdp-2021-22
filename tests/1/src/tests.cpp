@@ -1,7 +1,9 @@
 #define CATCH_CONFIG_MAIN
 
 #include "interface.h"
-#include "catch.hpp"
+#include "../../../group-G/source/common/catch.hpp"
+
+#include <vector>
 
 const int RESTOCK_TIME = 60;
 const int RESTOCK_AMOUNT = 100;
