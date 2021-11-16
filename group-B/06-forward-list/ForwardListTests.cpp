@@ -2,13 +2,16 @@
 #include <forward_list>
 #include "ForwardList.hpp"
 
+// Memory leak detection define and libraries
 #define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
+#include <cstdlib>
 #include <crtdbg.h>
 
 int main()
 {
+    // Unnamed scope so destructors of the lists will be called at the end
     {
+
         std::forward_list<int>  stdList;
         ForwardList<int>        ourList;
 
@@ -69,8 +72,17 @@ int main()
 
         std::cout << '\n';
 
-    }
+        // -------------- Task tests --------------
+        copiedList.reverse().print();
 
+        std::cout << '\n';
+
+        ForwardList<int>    lst2 = { 10, 30, 20, 20, 40, 20, 30, 30, 10, 10, 10 };
+        lst2.erase_repeats().print();
+    
+    }   // Destructors for all lists in the scope will be called here
+
+    // Detect and dump in the Output window any memory that hasn't been deleted
     _CrtDumpMemoryLeaks();
 
     return 0;

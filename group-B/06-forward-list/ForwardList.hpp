@@ -1,4 +1,7 @@
 #pragma once
+#ifndef _FORWARD_LIST_HEADER_INCLUDED_
+#define _FORWARD_LIST_HEADER_INCLUDED_
+
 #include <iterator>
 
 // Forward declaration
@@ -44,17 +47,16 @@ public:
     void                push_front( const_reference elem );
     void                pop_front();
 
-    //void                push_back( const_reference elem );    // Note: Not in STL
-
     reference           front()         { return fpHead->fData; }
     const_reference     front() const   { return fpHead->fData; }
 
     bool                empty() const   { return fpHead == nullptr; }
     void                clear();
 
-    //size_type           size() const;   // Note: Not in STL;
-    void                print() const;
+    const self_type&    print() const;
 
+    // Iterator methods
+public:
     iterator            begin()         { return iterator( fpHead ); }
     const_iterator      begin() const   { return iterator( fpHead ); }
 
@@ -62,6 +64,12 @@ public:
     const_iterator      end()   const   { return iterator( nullptr ); }
 
     iterator            insert_after( iterator after, const_reference elem );
+    //iterator            erase_after( iterator after );  // TODO: Implement
+
+    // Tasks
+public:
+    self_type&          reverse();
+    self_type&          erase_repeats();
 
     // Private methods
 private:
@@ -79,13 +87,11 @@ private:
         Node*       fpNext;
     };
 
-    friend class    iterator;
+    friend class    iterator;   // Used to access iterator's fpNode
 
     // Fields
 private:
     Node*       fpHead;
-    //Node*       fpTail; // Note: Not in STL
-    //size_type   fSize;  // Note: Not in STL
 };
 
 
@@ -105,16 +111,16 @@ public:
     using   const_reference     = DataType const&;
     using   self_type           = FListIter<DataType>;
     using   container           = ForwardList<DataType>;
-    using   container_node      = typename container::Node;
 
+    // Objects lifetime
 public:
     explicit            FListIter( void* ptr = nullptr );
                         FListIter( const self_type& )               = default;
+    self_type&          operator=( const self_type& )               = default;
                         ~FListIter()                                = default;
 
-    self_type&          operator=( const self_type& )               = default;
-    self_type&          operator=( container_node* ptr );
-
+    // Public operators
+public:
     explicit            operator bool()                                 const;
                         operator FListIter<DataType const>()            const;
 
@@ -131,11 +137,16 @@ public:
     const_pointer       operator->()    const   { return &fpNode->fData; }
 
 private:
-    friend class    container;
+    friend class    container;  // Used to access container's private Node
+    using   container_node      = typename container::Node;
 
+    // Fields
 private:
     container_node*     fpNode;
 };
 
 #include "ForwardList.ipp"
 #include "FListIter.ipp"
+#include "ForwardListTasks.ipp"
+
+#endif // !_FORWARD_LIST_HEADER_INCLUDED_

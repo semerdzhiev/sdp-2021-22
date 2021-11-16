@@ -1,18 +1,13 @@
 #pragma once
+#ifndef _FORWARD_LIST_ITERATOR_IMPLEMENTATION_INCLUDED_
+#define _FORWARD_LIST_ITERATOR_IMPLEMENTATION_INCLUDED_
+
 #include "ForwardList.hpp"
 
 template<class DataType>
 FListIter<DataType>::FListIter( void* ptr )
     : fpNode( static_cast<container_node*>( ptr ) )
 {}
-
-template<class DataType>
-FListIter<DataType>&
-FListIter<DataType>::operator=( container_node* ptr )
-{
-    fpNode = ptr;
-    return *this;
-}
 
 template<class DataType>
 FListIter<DataType>::operator bool() const
@@ -56,3 +51,5 @@ FListIter<DataType>::operator FListIter<DataType const>() const
 {
     return FListIter<DataType const>( fpNode );
 }
+
+#endif _FORWARD_LIST_ITERATOR_IMPLEMENTATION_INCLUDED_

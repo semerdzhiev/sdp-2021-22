@@ -1,12 +1,35 @@
 #pragma once
+#ifndef _FORWARD_LIST_IMPLEMENTATION_INCLUDED_
+#define _FORWARD_LIST_IMPLEMENTATION_INCLUDED_
+
 #include "ForwardList.hpp"
 
 template<class DataType>
 ForwardList<DataType>::ForwardList()
     : fpHead( nullptr )
-    //, fpTail( nullptr )
-    //, fSize( 0 )
 {}
+
+template<class DataType>
+ForwardList<DataType>::ForwardList( const std::initializer_list<value_type>& lst )
+    : ForwardList<DataType>()
+{
+    using init_list_iterator = const typename std::initializer_list<value_type>::value_type*;
+
+    // Or we could just write
+    //  auto    otherIt     = lst.begin();
+    //  auto    endIt       = lst.end();
+
+    init_list_iterator  otherIt     = lst.begin();
+    init_list_iterator  endIt       = lst.end();
+
+    this->push_front( *otherIt );
+    ++otherIt;
+
+    self_type::iterator     insIt   = this->begin();
+
+    for ( ; otherIt != endIt; otherIt++ )
+        insIt   = this->insert_after( insIt, *otherIt );
+}
 
 template<class DataType>
 ForwardList<DataType>::ForwardList( const self_type& other )
@@ -32,21 +55,6 @@ template<class DataType>
 ForwardList<DataType>::~ForwardList()
 {
     this->clear();
-}
-
-template<class DataType>
-ForwardList<DataType>::ForwardList( const std::initializer_list<value_type>& lst )
-{
-    auto    otherIt = lst.begin();
-    auto    endIt   = lst.end();
-
-    this->push_front( *otherIt );
-    ++otherIt;
-
-    self_type::iterator     insIt   = this->begin();
-
-    for ( ; otherIt != endIt; otherIt++ )
-        insIt   = this->insert_after( insIt, *otherIt );
 }
 
 template<class DataType>
@@ -84,7 +92,7 @@ ForwardList<DataType>::clear()
 }
 
 template<class DataType>
-void
+const ForwardList<DataType>&
 ForwardList<DataType>::print() const
 {
     std::cout << "[";
@@ -102,6 +110,8 @@ ForwardList<DataType>::print() const
     }
 
     std::cout << "]";
+
+    return *this;
 }
 
 template<class DataType>
@@ -111,6 +121,10 @@ ForwardList<DataType>::insert_after( iterator after, const_reference elem )
     Node*   pSavedNode      = after.fpNode->fpNext;
     after.fpNode->fpNext    = new Node( elem, pSavedNode );
     return iterator( after.fpNode->fpNext );
+    
+    // Can be written as:
+    //  return iterator( after.fpNode->fpNext = new Node( elem, after.fpNode->fpNext ) );
+    // but it becomes quite difficult to read.
 }
 
 template<class DataType>
@@ -122,7 +136,12 @@ ForwardList<DataType>::copy( const self_type& other )
 
     self_type::const_iterator   otherIt = other.begin();
     self_type::const_iterator   endIt   = other.end();
-    //self_type::iterator         insIt   = this->before_begin();
+
+    //  self_type::iterator         insIt   = this->before_begin();
+    //
+    // STL's forward_list has before_begin() that can be used
+    // with insert_after() to insert an element at the begining.
+    // Unfortunately it is not trivial to implement before_begin()
 
     this->push_front( *otherIt );
     ++otherIt;
@@ -132,8 +151,8 @@ ForwardList<DataType>::copy( const self_type& other )
     for ( ; otherIt != endIt; otherIt++ )
         insIt   = this->insert_after( insIt, *otherIt );
 
-    // Alternative:
-    //fpHead  = new Node( other.fpHead );
+    // Alternative without iterators:
+    //fpHead  = new Node( other.fpHead->fData );
     //Node*   pCurr   = fpHead;
     //Node*   pOther  = other.fpHead->fpNext;
 
@@ -144,3 +163,5 @@ ForwardList<DataType>::copy( const self_type& other )
     //    pOther          = pOther->fpNext;
     //}
 }
+
+#endif // !_FORWARD_LIST_IMPLEMENTATION_INCLUDED_
