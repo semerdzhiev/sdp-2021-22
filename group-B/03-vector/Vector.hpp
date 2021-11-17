@@ -19,13 +19,17 @@ private:
     static constexpr size_t     START_CAPACITY  = 4;
     static constexpr float      GROWTH_FACTOR   = 1.5f;
 
+    //STL campatibility
+public:
+
+
 public:
     using   iterator        = VecIter<DataType>;
     using   const_iterator  = VecIter<const DataType>;
 
     // Important!
-    // const_iterator   <==>   const int*
-    // const_iterator    !=    int* const
+    // const_iterator   ==   const int*
+    // const_iterator   !=   int* const
 
     // Big four (and a half?) (five?) + more
 public:
@@ -99,7 +103,10 @@ public:
     template<class Predicate>
     Vector<DataType>    filter( Predicate pred )                        const;
 
+    iterator            findKthLargest( size_t k );
     const_iterator      findKthLargest( size_t k )                      const;
+
+    Vector<DataType>    unique()                                        const;
 
 public:
     bool                contains( const DataType& elem )                const;
