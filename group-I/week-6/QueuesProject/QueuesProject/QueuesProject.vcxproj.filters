@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="knightMovement.cpp">
+      <Filter>Source\queue</Filter>
+    </ClCompile>
+    <ClCompile Include="supermarket.cpp">
+      <Filter>Source\producerConsumer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="dynamicArray.hpp">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="queue.hpp">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="priorityQueue.hpp">
+      <Filter>Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header">
+      <UniqueIdentifier>{5bbc07f3-0eb0-47a6-af99-6ee84c1561d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{a5e0cb02-71c8-44a7-a132-983e57d8d3db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\queue">
+      <UniqueIdentifier>{d11cd24d-2a80-4168-a9ac-8a72c03875e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\producerConsumer">
+      <UniqueIdentifier>{8c6bbe3c-5dc8-470d-97bb-57989fbabb8e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
