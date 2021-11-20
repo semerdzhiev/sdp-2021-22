@@ -87,12 +87,12 @@ struct TestStore : ActionHandler {
 		log.push_back(ev);
 	}
 
-	void onClientDepart(int index, int minute, int food, int water) override {
+	void onClientDepart(int index, int minute, int banana, int schweppes) override {
 		StoreEvent ev;
 		ev.type = StoreEvent::ClientDepart;
 		ev.minute = minute;
-		ev.client.banana = food;
-		ev.client.schweppes = water;
+		ev.client.banana = banana;
+		ev.client.schweppes = schweppes;
 		ev.client.index = index;
 		log.push_back(ev);
 	}
@@ -103,7 +103,6 @@ struct TestStore : ActionHandler {
 TEST_CASE("No workers, empty store, up to one client") {
 	TestStore store;
 	store.init(0, 0, 0);
-	const ClientList oneEmpty(1, Client{0, 0, 0, 0});
 
 	SECTION("No events") {
 		INFO("Without clients, no events should be generated");
@@ -118,9 +117,9 @@ TEST_CASE("No workers, empty store, up to one client") {
 	}
 
 	SECTION("Advance before depart time") {
-		store.addClients(oneEmpty);
+		store.addClients(Client{0, 1, 1, 1});
 		store.advanceTo(0);
-		INFO("Clients added before advance, are added at time 0");
+		INFO("Must not generate event before time is advanced to its time");
 		REQUIRE(store.log.size() == 0);
 	}
 
@@ -134,12 +133,11 @@ TEST_CASE("No workers, empty store, up to one client") {
 
 	SECTION("client without request") {
 		INFO("Client with wait time 0, must generate event at the time of arrival");
-		store.addClients(oneEmpty);
+		store.addClients(Client{0, 0, 0, 0});
 		store.advanceTo(0);
 		REQUIRE(store.log.size() == 1);
 
 		INFO("Client without any request should depart empty - (0 banana, 0 schweppes)");
-		StoreEvent last = store.log.back();
 		REQUIRE(LastEvent().minute == 0);
 		REQUIRE(LastEvent().type == StoreEvent::ClientDepart);
 		REQUIRE(LastEvent().client.banana == 0);
@@ -267,9 +265,34 @@ TEST_CASE("Example") {
 	SECTION("Last client") {
 		store.advanceTo(200);
 		INFO("Last client departs same time as arrival");
+		REQUIRE(store.log.size() == 8);
 		REQUIRE(LastEvent().type == StoreEvent::ClientDepart);
 		REQUIRE(LastEvent().client.banana == 10);
 		REQUIRE(LastEvent().client.schweppes == 20);
+	}
+
+	SECTION("Remaining resources") {
+		store.advanceTo(500);
+		int bananas = 0;
+		int schweppes = 0;
+		for (int c = 0; c < store.log.size(); c++) {
+			const StoreEvent &ev = store.log[c];
+			if (ev.type == StoreEvent::WorkerBack) {
+				REQUIRE(store.log[c].worker.resource == ResourceType::banana || store.log[c].worker.resource == ResourceType::schweppes);
+				if (ev.worker.resource == ResourceType::banana) {
+					bananas += RESTOCK_AMOUNT;
+				} else if (ev.worker.resource == ResourceType::schweppes) {
+					schweppes += RESTOCK_AMOUNT;
+				}
+			} else if (ev.type == StoreEvent::ClientDepart) {
+				bananas -= ev.client.banana;
+				schweppes -= ev.client.schweppes;
+			}
+		}
+
+		INFO("Stock amount - client depart amounth must be what is left in the store");
+		REQUIRE(store.getBanana() == bananas);
+		REQUIRE(store.getSchweppes() == schweppes);
 	}
 }
 
@@ -278,7 +301,7 @@ TEST_CASE("Workers can be sent out only when needed") {
 	store.init(1, 100, 0);
 
 	store.addClients({
-		Client{0, 100, 0, 1}, // this client will be everything
+		Client{0, 100, 0, 1}, // this client will get everything
 		Client{10, 1, 0, 1}
 	});
 
@@ -307,7 +330,7 @@ TEST_CASE("Workers must not be sent if resource will be available before client 
 	store.init(2, 0, 0);
 
 	store.addClients({
-		Client{0, 10, 0, 200}, // this client will be everything
+		Client{0, 10, 0, 200},
 		Client{10, 10, 0, 200}
 	});
 
