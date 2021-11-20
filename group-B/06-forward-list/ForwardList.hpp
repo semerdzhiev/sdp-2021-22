@@ -64,16 +64,23 @@ public:
     const_iterator      end()   const   { return iterator( nullptr ); }
 
     iterator            insert_after( iterator after, const_reference elem );
-    //iterator            erase_after( iterator after );  // TODO: Implement
+    iterator            erase_after( iterator after );
 
     // Tasks
 public:
     self_type&          reverse();
     self_type&          erase_repeats();
+    self_type&          erase_repeats_iters();
+    self_type&          unique();
+    self_type&          append( self_type other );
+
+    template<class Predicate>
+    self_type&          divide_by( Predicate pred );
 
     // Private methods
 private:
     void                copy( const self_type& other );
+    Node*               erase_after( Node* pAfter );
 
     // Node structure
 private:

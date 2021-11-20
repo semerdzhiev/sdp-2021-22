@@ -38,7 +38,7 @@ int main()
         std::cout << '\n';
 
         // Initializer list test
-        ForwardList<int>    initedList  = { 2, 4, 6, 8, 10 };
+        ForwardList<int>    initedList  = { 2, 5, 6, 7, 11 };
         initedList.print();
 
         std::cout << '\n';
@@ -78,7 +78,24 @@ int main()
         std::cout << '\n';
 
         ForwardList<int>    lst2 = { 10, 30, 20, 20, 40, 20, 30, 30, 10, 10, 10 };
+        lst2.print();
+
+        std::cout << '\n';
+
         lst2.erase_repeats().print();
+
+        std::cout << '\n';
+
+        lst2.unique().print();
+
+        std::cout << '\n';
+
+        lst2.append( copiedList ).print();
+
+        std::cout << '\n';
+
+        auto    isEven  = [] ( int num ) { return num % 2 == 0; };
+        lst2.divide_by( isEven ).print();
     
     }   // Destructors for all lists in the scope will be called here
 

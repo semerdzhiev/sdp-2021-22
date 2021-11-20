@@ -128,6 +128,16 @@ ForwardList<DataType>::insert_after( iterator after, const_reference elem )
 }
 
 template<class DataType>
+typename ForwardList<DataType>::iterator
+ForwardList<DataType>::erase_after( iterator after )
+{
+    // TODO: Implement
+    throw std::logic_error( "ForwardList<DataType>::erase_after( iterator after ) is not implemented!" );
+
+    return after;
+}
+
+template<class DataType>
 void
 ForwardList<DataType>::copy( const self_type& other )
 {
@@ -162,6 +172,16 @@ ForwardList<DataType>::copy( const self_type& other )
     //    pCurr           = pCurr->fpNext;
     //    pOther          = pOther->fpNext;
     //}
+}
+
+template<class DataType>
+typename ForwardList<DataType>::Node*
+ForwardList<DataType>::erase_after( Node* pAfter )
+{
+    // TODO: Implement
+    throw std::logic_error( "ForwardList<DataType>::erase_after( Node* pAfter ) is not implemented!" );
+
+    return pAfter;
 }
 
 #endif // !_FORWARD_LIST_IMPLEMENTATION_INCLUDED_
