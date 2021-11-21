@@ -45,7 +45,7 @@ public:
 
     // Public operators
 public:
-    operator const_iterator()               const;
+                        operator const_iterator()               const;
 
     bool                operator==( const self_type& other )    const;
     bool                operator!=( const self_type& other )    const;
