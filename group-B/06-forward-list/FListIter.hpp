@@ -39,9 +39,9 @@ private:
     explicit            FListIter( void* currPtr, void* nextPtr = nullptr );
 
 public:
-    FListIter( const self_type& )       = default;
+                        FListIter( const self_type& )       = default;
     self_type&          operator=( const self_type& )       = default;
-    ~FListIter()                        = default;
+                        ~FListIter()                        = default;
 
     // Public operators
 public:
