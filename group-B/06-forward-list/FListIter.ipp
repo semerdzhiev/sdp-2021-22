@@ -5,21 +5,16 @@
 #include "ForwardList.hpp"
 
 template<class DataType>
-FListIter<DataType>::FListIter( void* ptr )
-    : fpNode( static_cast<container_node*>( ptr ) )
+FListIter<DataType>::FListIter( void* currPtr, void* nextPtr )
+    : fpNode( static_cast<container_node*>( currPtr ) )
+    , fpNext( static_cast<container_node*>( nextPtr ) )
 {}
-
-template<class DataType>
-FListIter<DataType>::operator bool() const
-{
-    return fpNode != nullptr;
-}
 
 template<class DataType>
 bool
 FListIter<DataType>::operator==( const self_type& other ) const
 {
-    return fpNode == other.fpNode;
+    return fpNode == other.fpNode && fpNext == other.fpNext;
 }
 
 template<class DataType>
@@ -33,7 +28,8 @@ template<class DataType>
 FListIter<DataType>&
 FListIter<DataType>::operator++()
 {
-    fpNode = fpNode->fpNext;
+    fpNode = fpNode ? fpNode->fpNext : fpNext;
+    fpNext = nullptr;
     return *this;
 }
 
@@ -41,15 +37,15 @@ template<class DataType>
 FListIter<DataType>
 FListIter<DataType>::operator++( int )
 {
-    FListIter<DataType>     resIt = *this;
-    ++( *this );
+    self_type   resIt   = *this;
+    this->operator++();
     return resIt;
 }
 
 template<class DataType>
-FListIter<DataType>::operator FListIter<DataType const>() const
+FListIter<DataType>::operator const_iterator() const
 {
-    return FListIter<DataType const>( fpNode );
+    return const_iterator( fpNode );
 }
 
 #endif _FORWARD_LIST_ITERATOR_IMPLEMENTATION_INCLUDED_

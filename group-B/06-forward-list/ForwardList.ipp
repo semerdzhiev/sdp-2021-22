@@ -10,10 +10,10 @@ ForwardList<DataType>::ForwardList()
 {}
 
 template<class DataType>
-ForwardList<DataType>::ForwardList( const std::initializer_list<value_type>& lst )
+ForwardList<DataType>::ForwardList( const init_list& lst )
     : ForwardList<DataType>()
 {
-    using init_list_iterator = const typename std::initializer_list<value_type>::value_type*;
+    using init_list_iterator = typename init_list::iterator;
 
     // Or we could just write
     //  auto    otherIt     = lst.begin();
@@ -21,11 +21,7 @@ ForwardList<DataType>::ForwardList( const std::initializer_list<value_type>& lst
 
     init_list_iterator  otherIt     = lst.begin();
     init_list_iterator  endIt       = lst.end();
-
-    this->push_front( *otherIt );
-    ++otherIt;
-
-    self_type::iterator     insIt   = this->begin();
+    iterator            insIt       = this->before_begin();
 
     for ( ; otherIt != endIt; otherIt++ )
         insIt   = this->insert_after( insIt, *otherIt );
@@ -99,8 +95,8 @@ ForwardList<DataType>::print() const
 
     if ( !this->empty() )
     {
-        self_type::const_iterator   it      = this->begin();
-        self_type::const_iterator   endIt   = this->end();
+        const_iterator  it      = this->begin();
+        const_iterator  endIt   = this->end();
 
         std::cout << ' ' << *it << ' ';
         ++it;
@@ -118,6 +114,12 @@ template<class DataType>
 typename ForwardList<DataType>::iterator
 ForwardList<DataType>::insert_after( iterator after, const_reference elem )
 {
+    if ( after == this->before_begin() )
+    {
+        this->push_front( elem );
+        return iterator( fpHead );
+    }
+
     Node*   pSavedNode      = after.fpNode->fpNext;
     after.fpNode->fpNext    = new Node( elem, pSavedNode );
     return iterator( after.fpNode->fpNext );
@@ -144,19 +146,9 @@ ForwardList<DataType>::copy( const self_type& other )
     if ( other.empty() )
         return;
 
-    self_type::const_iterator   otherIt = other.begin();
-    self_type::const_iterator   endIt   = other.end();
-
-    //  self_type::iterator         insIt   = this->before_begin();
-    //
-    // STL's forward_list has before_begin() that can be used
-    // with insert_after() to insert an element at the begining.
-    // Unfortunately it is not trivial to implement before_begin()
-
-    this->push_front( *otherIt );
-    ++otherIt;
-
-    self_type::iterator         insIt   = this->begin();
+    const_iterator  otherIt = other.begin();
+    const_iterator  endIt   = other.end();
+    iterator        insIt   = this->before_begin();
     
     for ( ; otherIt != endIt; otherIt++ )
         insIt   = this->insert_after( insIt, *otherIt );
