@@ -217,6 +217,7 @@ TEST_CASE("Multiple stores") {
 	SECTION("Clients to one of the stores") {
 		bananaStore.addClients(Client{0, 10, 0, 10});
 		bananaStore.advanceTo(0);
+		schweppesStore.advanceTo(0);
 
 		INFO("New client to one store must not generate event in the other store");
 		REQUIRE(bananaStore.log.size() == 1);
@@ -226,6 +227,9 @@ TEST_CASE("Multiple stores") {
 	SECTION("Clients to both stores") {
 		bananaStore.addClients(Client{0, 5, 0, 0});
 		schweppesStore.addClients(Client{0, 0, 10, 0});
+
+		bananaStore.advanceTo(0);
+		schweppesStore.advanceTo(0);
 
 		INFO("Both stores should generate valid evenets");
 		REQUIRE(bananaStore.log.back().type == StoreEvent::ClientDepart);
@@ -268,7 +272,7 @@ TEST_CASE("Example") {
 		REQUIRE(store.log.size() == 8);
 		REQUIRE(LastEvent().type == StoreEvent::ClientDepart);
 		REQUIRE(LastEvent().client.banana == 10);
-		REQUIRE(LastEvent().client.schweppes == 20);
+		REQUIRE(LastEvent().client.schweppes == 10);
 	}
 
 	SECTION("Remaining resources") {
@@ -278,7 +282,8 @@ TEST_CASE("Example") {
 		for (int c = 0; c < store.log.size(); c++) {
 			const StoreEvent &ev = store.log[c];
 			if (ev.type == StoreEvent::WorkerBack) {
-				REQUIRE(store.log[c].worker.resource == ResourceType::banana || store.log[c].worker.resource == ResourceType::schweppes);
+				REQUIRE(store.log[c].worker.resource >= ResourceType::banana);
+				REQUIRE(store.log[c].worker.resource <= ResourceType::schweppes);
 				if (ev.worker.resource == ResourceType::banana) {
 					bananas += RESTOCK_AMOUNT;
 				} else if (ev.worker.resource == ResourceType::schweppes) {
@@ -357,8 +362,8 @@ TEST_CASE("Clients depart and take what they can") {
 
 	SECTION("Sent out worker") {
 		store.advanceTo(3);
-		INFO("Store must send 1 workers, and 2 clients have departed");
-		REQUIRE(store.log.size() == 3);
+		INFO("Store must send 1 worker, and 1 client have departed");
+		REQUIRE(store.log.size() == 2);
 	}
 
 	SECTION("Client departs with only part of requirement") {
