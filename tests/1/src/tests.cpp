@@ -359,10 +359,10 @@ TEST_CASE("Clients depart and take what they can") {
 		Client{1, 20, 0, 5}
 	});
 
-	SECTION("Sent out worker") {
+	SECTION("Sent out workers") {
 		store.advanceTo(3);
-		INFO("Store must send 1 worker, and 1 client have departed");
-		REQUIRE(store.log.size() == 2);
+		INFO("Store must send 2 workers, and 1 client has departed");
+		REQUIRE(store.log.size() == 3);
 	}
 
 	SECTION("Client departs with only part of requirement") {
