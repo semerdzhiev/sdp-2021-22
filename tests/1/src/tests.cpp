@@ -350,7 +350,6 @@ TEST_CASE("Workers must not be sent if resource will be available before client 
 	}
 }
 
-
 TEST_CASE("Clients depart and take what they can") {
 	TestStore store;
 	store.init(5, 10, 0);
