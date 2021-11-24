@@ -17,13 +17,13 @@ template <typename T>
 using TestList = std::list<T, stl_allocator<T>>;
 
 // std::list's Node is this for MSVC
-#ifdef __MINGW32__
+#if defined(__MINGW32__) || defined(__GNUC__)
 
 template <typename T>
 using ListNode = std::_List_node<T>;
 
 
-#elif _MSC_VER
+#elif defined(_MSC_VER)
 
 template <typename T>
 using ListNode = std::_List_node<T, typename std::allocator_traits<stl_allocator<T>>::void_pointer>;

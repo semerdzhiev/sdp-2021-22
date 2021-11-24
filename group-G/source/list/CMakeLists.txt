@@ -1,4 +1,4 @@
-project(ListTestS)
+project(ListTests)
 
 set(SOURCES
 	../common/catch_utils.hpp
