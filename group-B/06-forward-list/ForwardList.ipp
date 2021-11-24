@@ -79,6 +79,7 @@ ForwardList<DataType>::clear()
 
     // Alternative:
     //Node*   pToDel  = fpHead;
+    // 
     //while ( pToDel )
     //{
     //    fpHead  = fpHead->fpNext;
@@ -133,10 +134,13 @@ template<class DataType>
 typename ForwardList<DataType>::iterator
 ForwardList<DataType>::erase_after( iterator after )
 {
-    // TODO: Implement
-    throw std::logic_error( "ForwardList<DataType>::erase_after( iterator after ) is not implemented!" );
+    if ( after == this->end() )
+        throw std::logic_error( "ForwardList<?>::erase_after() erase after end() iter!" );
 
-    return after;
+    if ( after.fpNode->fpNext == nullptr )
+        throw std::logic_error( "ForwardList<?>::erase_after() erase after last element!" );
+
+    return iterator( this->erase_after( after.fpNode ) );
 }
 
 template<class DataType>
@@ -146,17 +150,18 @@ ForwardList<DataType>::copy( const self_type& other )
     if ( other.empty() )
         return;
 
-    const_iterator  otherIt = other.begin();
-    const_iterator  endIt   = other.end();
+    //const_iterator  otherIt = other.begin();
+    //const_iterator  endIt   = other.end();
     iterator        insIt   = this->before_begin();
     
-    for ( ; otherIt != endIt; otherIt++ )
-        insIt   = this->insert_after( insIt, *otherIt );
+    //for ( ; otherIt != endIt; otherIt++ )
+    for ( const DataType& elem : other )
+        insIt   = this->insert_after( insIt, elem );
 
     // Alternative without iterators:
     //fpHead  = new Node( other.fpHead->fData );
-    //Node*   pCurr   = fpHead;
-    //Node*   pOther  = other.fpHead->fpNext;
+    //Node*       pCurr   = fpHead;
+    //const Node* pOther  = other.fpHead->fpNext;
 
     //while ( pOther )
     //{
@@ -170,10 +175,18 @@ template<class DataType>
 typename ForwardList<DataType>::Node*
 ForwardList<DataType>::erase_after( Node* pAfter )
 {
-    // TODO: Implement
-    throw std::logic_error( "ForwardList<DataType>::erase_after( Node* pAfter ) is not implemented!" );
+    if ( pAfter == nullptr )
+        return nullptr;
 
-    return pAfter;
+    if ( pAfter->fpNext == nullptr )
+        return nullptr;
+
+    Node*   pNext   = pAfter->fpNext;
+    pAfter->fpNext  = pNext->fpNext;
+
+    delete pNext;
+
+    return pAfter->fpNext;
 }
 
 #endif // !_FORWARD_LIST_IMPLEMENTATION_INCLUDED_

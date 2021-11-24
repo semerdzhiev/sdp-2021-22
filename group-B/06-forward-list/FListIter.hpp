@@ -64,10 +64,10 @@ private:
     friend class    const_container;        // Private fpNode
     friend class    non_const_iterator;     // Private ctor
 
-                                            // Fields
+    // Fields
 private:
     container_node*     fpNode;
-    container_node*     fpNext;
+    container_node*     fpNext; // Nasty workaround for before_begin() to work
 };
 
 #include "FListIter.ipp"

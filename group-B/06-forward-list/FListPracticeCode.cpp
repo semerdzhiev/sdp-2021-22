@@ -1,3 +1,6 @@
+//#define _FORWARD_LIST_PRACTICE_CODE_
+#ifdef _FORWARD_LIST_PRACTICE_CODE_
+
 #include <iostream>
 
 struct Node
@@ -53,3 +56,5 @@ int main()
 
     return 0;
 }
+
+#endif // _FORWARD_LIST_PRACTICE_CODE_

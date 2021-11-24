@@ -1,3 +1,6 @@
+//#define _FORWARD_LIST_TESTS_
+#ifdef _FORWARD_LIST_TESTS_
+
 #include <iostream>
 #include <forward_list>
 #include "ForwardList.hpp"
@@ -82,11 +85,11 @@ int main()
 
         std::cout << '\n';
 
-        lst2.erase_repeats().print();
+        lst2.erase_repeats_iters().print();
 
         std::cout << '\n';
 
-        lst2.unique().print();
+        //lst2.unique().print();
 
         std::cout << '\n';
 
@@ -104,3 +107,5 @@ int main()
 
     return 0;
 }
+
+#endif // _FORWARD_LIST_TESTS_

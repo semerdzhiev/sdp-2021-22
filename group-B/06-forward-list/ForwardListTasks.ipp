@@ -54,7 +54,24 @@ template<class DataType>
 ForwardList<DataType>&
 ForwardList<DataType>::erase_repeats_iters()
 {
-    // TODO: Implement using iterators
+    if ( this->empty() )
+        return *this;
+
+    iterator    currIt  = this->begin();
+    iterator    nextIt  = this->begin();
+
+    while ( nextIt != this->end() )
+    {
+        if ( *currIt == *nextIt )
+        {
+            nextIt  = this->erase_after( currIt );
+        }
+        else
+        {
+            ++currIt;
+            ++nextIt;
+        }
+    }
 
     return *this;
 }
@@ -75,25 +92,22 @@ ForwardList<DataType>::unique()
     }
 
     // Alternative version with iterators
-    //self_type::iterator     itCurr      = this->begin();
+    //iterator     itCurr      = this->begin();
 
     //for ( ; itCurr != this->end(); itCurr++ )
     //{
-    //    self_type::iterator itEraser    = itCurr;
-    //    self_type::iterator itAfterEr   = itCurr;
+    //    iterator itEraser    = itCurr;
+    //    iterator itAfterEr   = itCurr;
     //    itAfterEr++;
     //    while ( itAfterEr != this->end() )
     //    {
     //        if ( *itCurr == *itAfterEr )
     //        {
-    //            this->erase_after( itEraser );
-    //            itAfterEr = itEraser;
-    //            itAfterEr++;
+    //            itAfterEr = this->erase_after( itEraser );
     //        }
     //        else
     //        {
     //            itEraser++;
-    //            itAfterEr = itEraser;
     //            itAfterEr++;
     //        }
     //    }
