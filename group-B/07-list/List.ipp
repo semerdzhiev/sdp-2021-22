@@ -210,7 +210,7 @@ template<class DataType>
 typename List<DataType>::iterator
 List<DataType>::erase( iterator position )
 {
-    return iterator( this->erase( position->fpNode ) );
+    return iterator( this->erase( position.fpNode ) );
 }
 
 template<class DataType>
