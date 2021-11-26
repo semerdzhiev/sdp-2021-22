@@ -18,17 +18,15 @@ struct StoreEvent {
 	Type type;
 	int minute;
 
-	union {
-		struct Worker {
-			ResourceType resource;
-		} worker;
+	struct Worker {
+		ResourceType resource;
+	} worker;
 
-		struct Client {
-			int index;
-			int banana;
-			int schweppes;
-		} client;
-	};
+	struct Client {
+		int index;
+		int banana;
+		int schweppes;
+	} client;
 };
 
 struct TestStore : ActionHandler {
