@@ -8,10 +8,6 @@
 template<class DataType>
 class List;
 
-// Forward declaration of the ListRevIter class
-template<class DataType>
-class ListRevIter;
-
 //------------------------------------------------------------------------------
 template<class DataType>
 class ListIter
@@ -30,7 +26,6 @@ public:
     using   self_type               = ListIter<value_type>;
     using   container               = List<value_type>;
     using   const_iterator          = ListIter<const_value_type>;
-    using   reverse_iterator        = ListRevIter<value_type>;
 
 private:
     using   non_const_value_type    = typename std::remove_const<value_type>::type;
