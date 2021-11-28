@@ -11,6 +11,12 @@ ListIter<DataType>::ListIter( void* currPtr )
 {}
 
 template<class DataType>
+ListIter<DataType>::operator const_iterator() const
+{
+    return const_iterator( fpNode );
+}
+
+template<class DataType>
 bool
 ListIter<DataType>::operator==( const self_type& other ) const
 {
@@ -31,7 +37,7 @@ ListIter<DataType>::operator++()
     if ( !fpNode )
         throw std::logic_error( "ListIter<?>: Cannot increment end() iterator" );
 
-    fpNode = fpNode->fpNext;
+    fpNode  = fpNode->fpNext;
     return *this;
 }
 
@@ -49,12 +55,12 @@ ListIter<DataType>&
 ListIter<DataType>::operator--()
 {
     if ( ! fpNode )
-        throw std::logic_error( "ListIter<?>: Cannot decrement end() iterator" );
+        throw std::logic_error( "ListIter<?>: Cannot decrement end() iterator (not implemented)" );
 
-    if ( ! fpNode->fpNext )
+    if ( ! fpNode->fpPrev )
         throw std::logic_error( "ListIter<?>: Cannot decrement begin() iterator" );
 
-    fpNode = fpNode->fpPrev;
+    fpNode  = fpNode->fpPrev;
     return *this;
 }
 
@@ -67,10 +73,74 @@ ListIter<DataType>::operator--( int )
     return resIt;
 }
 
+//------------------------------------------------------------------------------
+
 template<class DataType>
-ListIter<DataType>::operator const_iterator() const
+ListRevIter<DataType>::ListRevIter( void* currPtr )
+    : ListIter<DataType>( currPtr )
+{}
+
+template<class DataType>
+ListRevIter<DataType>::operator const_iterator() const
 {
-    return const_iterator( fpNode );
+    return const_iterator( this->fpNode );
+}
+
+template<class DataType>
+bool
+ListRevIter<DataType>::operator==( const self_type& other ) const
+{
+    return ListIter<DataType>::operator==( other );
+}
+
+template<class DataType>
+bool
+ListRevIter<DataType>::operator!=( const self_type& other ) const
+{
+    return ListIter<DataType>::operator!=( other );
+}
+
+template<class DataType>
+ListRevIter<DataType>&
+ListRevIter<DataType>::operator++()
+{
+    if ( ! this->fpNode )
+        throw std::logic_error( "ListIter<?>: Cannot increment rend() iterator" );
+
+    this->fpNode    = this->fpNode->fpPrev;
+    return *this;
+}
+
+template<class DataType>
+ListRevIter<DataType>
+ListRevIter<DataType>::operator++( int )
+{
+    self_type   resIt   = *this;
+    this->operator++();
+    return resIt;
+}
+
+template<class DataType>
+ListRevIter<DataType>&
+ListRevIter<DataType>::operator--()
+{
+    if ( ! this->fpNode )
+        throw std::logic_error( "ListIter<?>: Cannot decrement rend() iterator (not implemented)" );
+
+    if ( ! this->fpNode->fpNext )
+        throw std::logic_error( "ListIter<?>: Cannot decrement rbegin() iterator" );
+
+    this->fpNode    = this->fpNode->fpNext;
+    return *this;
+}
+
+template<class DataType>
+ListRevIter<DataType>
+ListRevIter<DataType>::operator--( int )
+{
+    self_type   resIt   = *this;
+    this->operator--();
+    return resIt;
 }
 
 #endif _LIST_ITERATOR_IMPLEMENTATION_INCLUDED_
