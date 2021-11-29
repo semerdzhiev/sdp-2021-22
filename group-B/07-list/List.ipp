@@ -9,10 +9,12 @@ template<class DataType>
 List<DataType>::List()
     : fpHead( nullptr )
     , fpTail( nullptr )
+    , fSize( 0 )
 {}
 
 template<class DataType>
 List<DataType>::List( const init_list& initList )
+    : List<DataType>()  // push_back() relies on 'this' being in a valid state!
 {
     for ( const value_type& elem : initList )
         this->push_back( elem );
@@ -20,6 +22,7 @@ List<DataType>::List( const init_list& initList )
 
 template<class DataType>
 List<DataType>::List( const self_type& other )
+    : List<DataType>()  // push_back() relies on 'this' being in a valid state!
 {
     for ( const value_type& elem : other )
         this->push_back( elem );
@@ -67,6 +70,8 @@ List<DataType>::push_front( const_reference elem )
         fpHead->fpPrev  = new Node( elem, nullptr, fpHead );
         fpHead          = fpHead->fpPrev;
     }
+
+    ++fSize;
 }
 
 template<class DataType>
@@ -83,6 +88,8 @@ List<DataType>::push_back( const_reference elem )
         fpTail->fpNext  = new Node( elem, fpTail, nullptr );
         fpTail          = fpTail->fpNext;
     }
+
+    ++fSize;
 }
 
 template<class DataType>
@@ -105,6 +112,8 @@ List<DataType>::pop_front()
 
         fpHead->fpPrev  = nullptr;
     }
+
+    --fSize;
 }
 
 template<class DataType>
@@ -127,6 +136,8 @@ List<DataType>::pop_back()
 
         fpTail->fpNext  = nullptr;
     }
+
+    --fSize;
 }
 
 template<class DataType>
@@ -147,6 +158,7 @@ List<DataType>::clear()
     //}
     // 
     //fpTail  = nullptr;
+    //fSize   = 0;
 }
 
 template<class DataType>
@@ -176,8 +188,9 @@ template<class DataType>
 void swap( List<DataType>& lhs, List<DataType>& rhs )
 {
     using std::swap;
-    swap( lhs.fpHead, rhs.fpHead );
-    swap( lhs.fpTail, rhs.fpTail );
+    swap( lhs.fpHead    , rhs.fpHead );
+    swap( lhs.fpTail    , rhs.fpTail );
+    swap( lhs.fSize     , rhs.fSize  );
 }
 
 template<class DataType>
@@ -202,6 +215,8 @@ List<DataType>::insert( iterator position, const_reference elem )
 
     currNode->fpPrev    = newNode;
     prevNode->fpNext    = newNode;
+
+    ++fSize;
 
     return iterator( newNode );
 }
@@ -242,6 +257,8 @@ List<DataType>::erase( Node* pNode )
     pNext->fpPrev   = pPrev;
 
     delete  pNode;
+
+    --fSize;
 
     return pNext;
 }

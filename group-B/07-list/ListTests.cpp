@@ -1,3 +1,6 @@
+#define _LIST_TESTS_
+#ifdef _LIST_TESTS_
+
 #include <iostream>
 #include <list>
 #include "List.hpp"
@@ -91,35 +94,55 @@ int main()
 
         copiedList.print();
 
+        std::cout << '\n';
+
+        // Reverse iterators test
+        List<int>::reverse_iterator itCurr  = copiedList.rbegin();
+        List<int>::reverse_iterator itEnd   = copiedList.rend();
+        
+        for ( ; itCurr != itEnd; itCurr++ )
+            std::cout << *itCurr << " ";
+
+        std::cout << '\n';
+
+        itCurr  = ++copiedList.rbegin();
+        copiedList.erase( itCurr );
+
+        copiedList.print();
+
+        std::cout << '\n';
+
         // -------------- Task tests --------------
-        //copiedList.reverse().print();
+        copiedList.reverse().print();
 
-        //std::cout << '\n';
+        std::cout << '\n';
 
-        //List<int>    lst2 = { 10, 30, 20, 20, 40, 20, 30, 30, 10, 10, 10 };
-        //lst2.print();
+        List<int>    lst2 = { 10, 30, 20, 20, 40, 20, 30, 30, 10, 10, 10 };
+        lst2.print();
 
-        //std::cout << '\n';
+        std::cout << '\n';
 
-        ////lst2.erase_repeats().print();
+        lst2.erase_repeats().print();
 
-        //std::cout << '\n';
+        std::cout << '\n';
 
-        ////lst2.unique().print();
+        lst2.unique().print();
 
-        //std::cout << '\n';
+        std::cout << '\n';
 
-        //lst2.append( copiedList ).print();
+        lst2.append( copiedList ).print();
 
-        //std::cout << '\n';
+        std::cout << '\n';
 
-        //auto    isEven  = [] ( int num ) { return num % 2 == 0; };
-        //lst2.divide_by( isEven ).print();
+        auto    isEven  = [] ( int num ) { return num % 2 == 0; };
+        lst2.divide_by( isEven ).print();
 
     }   // Destructors for all lists in the scope will be called here
 
-    // Detect and dump in the Output window any memory that hasn't been deleted
+    // Detect and dump any memory that hasn't been deleted in the Output window
     _CrtDumpMemoryLeaks();
 
     return 0;
 }
+
+#endif // !_LIST_TESTS_
