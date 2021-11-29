@@ -3,7 +3,7 @@
 /// This is sample empty implementation you can place your solution here or delete this and include tests to your solution
 
 
-struct MyStore : Store {
+struct MyStore : public Store {
 	ActionHandler *actionHandler = nullptr;
 
 	void setActionHandler(ActionHandler *handler) override {
