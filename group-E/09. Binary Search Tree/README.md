@@ -8,7 +8,7 @@
 **Празното дърво също е двоично наредено дърво**
 
 ## Обхождане на двоично (наредено) дърво
-# inorder - ЛКД - ляво-корен-дясно
-# preorder - КЛД - корен-ляво-дясно
-# postorder - ЛДК - ляво-дясно-корен
+### inorder - ЛКД - ляво-корен-дясно
+### preorder - КЛД - корен-ляво-дясно
+### postorder - ЛДК - ляво-дясно-корен
 <img src="https://media.geeksforgeeks.org/wp-content/cdn-uploads/Preorder-from-Inorder-and-Postorder-traversals.jpg" alt="traversals" width="400"/>
