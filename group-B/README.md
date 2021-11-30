@@ -1,0 +1,1 @@
+A table containing the **time complexities** of the operations that each of the studied **data structures** implement can be found [here](https://docs.google.com/spreadsheets/d/1K89e_rIXThxHu_6uWYPHt7qPVfon-lNa7OoEO8g8HXE).
