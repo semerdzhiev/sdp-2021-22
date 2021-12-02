@@ -26,7 +26,7 @@ ForwardList<DataType>::reverse()
 
 template<class DataType>
 ForwardList<DataType>&
-ForwardList<DataType>::erase_repeats()      // TODO: Version with iterators
+ForwardList<DataType>::erase_repeats()
 {
     if ( this->empty() )
         return *this;
@@ -38,16 +38,150 @@ ForwardList<DataType>::erase_repeats()      // TODO: Version with iterators
     {
         if ( pCurr->fData == pNext->fData )
         {
-            Node* pTemp     = pNext;
-            pCurr->fpNext   = pNext->fpNext;
-            delete  pTemp;
-
-            pNext   = pCurr->fpNext;
+            pNext   = this->erase_after( pCurr );
         }
         else
         {
             pCurr   = pCurr->fpNext;
             pNext   = pCurr->fpNext;
+        }
+    }
+
+    return *this;
+}
+
+template<class DataType>
+ForwardList<DataType>&
+ForwardList<DataType>::erase_repeats_iters()
+{
+    if ( this->empty() )
+        return *this;
+
+    iterator    currIt  = this->begin();
+    iterator    nextIt  = this->begin();
+
+    while ( nextIt != this->end() )
+    {
+        if ( *currIt == *nextIt )
+        {
+            nextIt  = this->erase_after( currIt );
+        }
+        else
+        {
+            ++currIt;
+            ++nextIt;
+        }
+    }
+
+    return *this;
+}
+
+template<class DataType>
+ForwardList<DataType>&
+ForwardList<DataType>::unique()
+{
+    for ( Node* pCurr = fpHead; pCurr != nullptr; pCurr = pCurr->fpNext )
+    {
+        for ( Node* pEraser = pCurr; pEraser->fpNext != nullptr; )
+        {
+            if ( pCurr->fData == pEraser->fpNext->fData )
+                this->erase_after( pEraser );
+            else
+                pEraser = pEraser->fpNext;
+        }
+    }
+
+    // Alternative version with iterators
+    //iterator     itCurr      = this->begin();
+
+    //for ( ; itCurr != this->end(); itCurr++ )
+    //{
+    //    iterator itEraser    = itCurr;
+    //    iterator itAfterEr   = itCurr;
+    //    itAfterEr++;
+    //    while ( itAfterEr != this->end() )
+    //    {
+    //        if ( *itCurr == *itAfterEr )
+    //        {
+    //            itAfterEr = this->erase_after( itEraser );
+    //        }
+    //        else
+    //        {
+    //            itEraser++;
+    //            itAfterEr++;
+    //        }
+    //    }
+    //}
+
+    return *this;
+}
+
+template<class DataType>
+ForwardList<DataType>&
+ForwardList<DataType>::append( self_type other )
+{
+    if ( this->empty() )
+    {
+        fpHead  = other.fpHead;
+    }
+    else
+    {
+        Node*   pCurr   = fpHead;
+        while ( pCurr->fpNext )
+            pCurr   = pCurr->fpNext;
+        
+        pCurr->fpNext   = other.fpHead;
+    }
+
+    other.fpHead    = nullptr;
+
+    return *this;
+}
+
+template<class DataType>
+template<class Predicate>
+ForwardList<DataType>&
+ForwardList<DataType>::divide_by( Predicate pred )
+{
+    if ( this->empty() || fpHead->fpNext == nullptr )
+        return *this;
+
+    size_t  elemCnt = 1;
+
+    Node*   pLast   = fpHead;
+    while ( pLast->fpNext )
+    {
+        pLast   = pLast->fpNext;
+        ++elemCnt;
+    }
+
+    Node*   pPrev   = nullptr;
+    Node*   pCurr   = fpHead;
+    for ( size_t i = 0; i < elemCnt; i++ )
+    {
+        if ( pred( pCurr->fData ) )
+        {
+            if ( pCurr == fpHead )
+            {
+                fpHead          = fpHead->fpNext;
+                pLast->fpNext   = pCurr;
+                pLast           = pLast->fpNext;
+                pCurr           = fpHead;
+            }
+            else if ( pCurr != pLast )
+            {
+                pPrev->fpNext   = pCurr->fpNext;
+                pLast->fpNext   = pCurr;
+                pLast           = pLast->fpNext;
+                pCurr           = pPrev->fpNext;
+            }
+
+            pLast->fpNext   = nullptr;
+        }
+        else
+        {
+            pPrev   = pCurr;
+            pCurr   = pCurr->fpNext;
         }
     }
 

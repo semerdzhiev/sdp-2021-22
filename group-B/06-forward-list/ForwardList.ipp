@@ -10,10 +10,10 @@ ForwardList<DataType>::ForwardList()
 {}
 
 template<class DataType>
-ForwardList<DataType>::ForwardList( const std::initializer_list<value_type>& lst )
+ForwardList<DataType>::ForwardList( const init_list& lst )
     : ForwardList<DataType>()
 {
-    using init_list_iterator = const typename std::initializer_list<value_type>::value_type*;
+    using init_list_iterator = typename init_list::iterator;
 
     // Or we could just write
     //  auto    otherIt     = lst.begin();
@@ -21,11 +21,7 @@ ForwardList<DataType>::ForwardList( const std::initializer_list<value_type>& lst
 
     init_list_iterator  otherIt     = lst.begin();
     init_list_iterator  endIt       = lst.end();
-
-    this->push_front( *otherIt );
-    ++otherIt;
-
-    self_type::iterator     insIt   = this->begin();
+    iterator            insIt       = this->before_begin();
 
     for ( ; otherIt != endIt; otherIt++ )
         insIt   = this->insert_after( insIt, *otherIt );
@@ -83,6 +79,7 @@ ForwardList<DataType>::clear()
 
     // Alternative:
     //Node*   pToDel  = fpHead;
+    // 
     //while ( pToDel )
     //{
     //    fpHead  = fpHead->fpNext;
@@ -99,8 +96,8 @@ ForwardList<DataType>::print() const
 
     if ( !this->empty() )
     {
-        self_type::const_iterator   it      = this->begin();
-        self_type::const_iterator   endIt   = this->end();
+        const_iterator  it      = this->begin();
+        const_iterator  endIt   = this->end();
 
         std::cout << ' ' << *it << ' ';
         ++it;
@@ -118,6 +115,12 @@ template<class DataType>
 typename ForwardList<DataType>::iterator
 ForwardList<DataType>::insert_after( iterator after, const_reference elem )
 {
+    if ( after == this->before_begin() )
+    {
+        this->push_front( elem );
+        return iterator( fpHead );
+    }
+
     Node*   pSavedNode      = after.fpNode->fpNext;
     after.fpNode->fpNext    = new Node( elem, pSavedNode );
     return iterator( after.fpNode->fpNext );
@@ -128,33 +131,37 @@ ForwardList<DataType>::insert_after( iterator after, const_reference elem )
 }
 
 template<class DataType>
+typename ForwardList<DataType>::iterator
+ForwardList<DataType>::erase_after( iterator after )
+{
+    if ( after == this->end() )
+        throw std::logic_error( "ForwardList<?>::erase_after() erase after end() iter!" );
+
+    if ( after.fpNode->fpNext == nullptr )
+        throw std::logic_error( "ForwardList<?>::erase_after() erase after last element!" );
+
+    return iterator( this->erase_after( after.fpNode ) );
+}
+
+template<class DataType>
 void
 ForwardList<DataType>::copy( const self_type& other )
 {
     if ( other.empty() )
         return;
 
-    self_type::const_iterator   otherIt = other.begin();
-    self_type::const_iterator   endIt   = other.end();
-
-    //  self_type::iterator         insIt   = this->before_begin();
-    //
-    // STL's forward_list has before_begin() that can be used
-    // with insert_after() to insert an element at the begining.
-    // Unfortunately it is not trivial to implement before_begin()
-
-    this->push_front( *otherIt );
-    ++otherIt;
-
-    self_type::iterator         insIt   = this->begin();
+    //const_iterator  otherIt = other.begin();
+    //const_iterator  endIt   = other.end();
+    iterator        insIt   = this->before_begin();
     
-    for ( ; otherIt != endIt; otherIt++ )
-        insIt   = this->insert_after( insIt, *otherIt );
+    //for ( ; otherIt != endIt; otherIt++ )
+    for ( const DataType& elem : other )
+        insIt   = this->insert_after( insIt, elem );
 
     // Alternative without iterators:
     //fpHead  = new Node( other.fpHead->fData );
-    //Node*   pCurr   = fpHead;
-    //Node*   pOther  = other.fpHead->fpNext;
+    //Node*       pCurr   = fpHead;
+    //const Node* pOther  = other.fpHead->fpNext;
 
     //while ( pOther )
     //{
@@ -162,6 +169,24 @@ ForwardList<DataType>::copy( const self_type& other )
     //    pCurr           = pCurr->fpNext;
     //    pOther          = pOther->fpNext;
     //}
+}
+
+template<class DataType>
+typename ForwardList<DataType>::Node*
+ForwardList<DataType>::erase_after( Node* pAfter )
+{
+    if ( pAfter == nullptr )
+        return nullptr;
+
+    if ( pAfter->fpNext == nullptr )
+        return nullptr;
+
+    Node*   pNext   = pAfter->fpNext;
+    pAfter->fpNext  = pNext->fpNext;
+
+    delete pNext;
+
+    return pAfter->fpNext;
 }
 
 #endif // !_FORWARD_LIST_IMPLEMENTATION_INCLUDED_
