@@ -5,3 +5,4 @@ Repository for the "Data structures and algorithms" course for the 2021/22 acade
 
 * `lectures` -- code from the lectures.
 * `group-N` -- exercise classes for group `N`.
+* `tests` -- tests for the course assignments.
