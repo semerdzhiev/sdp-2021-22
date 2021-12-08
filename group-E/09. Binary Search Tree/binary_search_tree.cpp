@@ -65,11 +65,11 @@ private:
         {
             return nullptr;
         }
-        if (tree->value < value)
+        if (tree->value > value)
         {
             tree->left = recursive_delete_value(tree->left, value);
         }
-        else if (tree->value > value)
+        else if (tree->value < value)
         {
             tree->right = recursive_delete_value(tree->right, value);
         }
