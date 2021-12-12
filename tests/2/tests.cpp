@@ -1,7 +1,8 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
 
-#include "interface.h"
+//#include "interface.h"
+#include "Hierarchy.h"
 
 const string TheBoss = "Uspeshnia";
 
@@ -227,8 +228,8 @@ TEST_CASE("Incorporate") {
     loz.incorporate();
 
     REQUIRE(loz.print() ==
-        "Uspeshnia-Gosho\nGosho-Dancho\nGosho-Misho\nGosho-Pesho\nGosho-Slavi\nDancho-Boris\n"
-        "Dancho-Kamen\nPesho-Alex\nSlavi-Slav1\nSlavi-Slav2\nSlav1-Mecho\nMecho-Q12Adl\n");
+        "Uspeshnia-Gosho\nGosho-Dancho\nGosho-Misho\nGosho-Slavi\nDancho-Boris\n"
+        "Dancho-Pesho\nSlavi-Slav1\nBoris-Kamen\nPesho-Alex\nSlav1-Mecho\nSlav1-Slav2\nMecho-Q12Adl\n");
 
     REQUIRE(loz.longest_chain() == 6);
     REQUIRE(loz.num_employees() == 13);
@@ -240,16 +241,19 @@ TEST_CASE("Incorporate") {
     CHECK(h.longest_chain() == 4);
     CHECK(h.num_employees() == 25);
     CHECK(h.num_subordinates("3") == 9);
+
     h.incorporate();
-    
-    REQUIRE(h.print() == 
-        "Uspeshnia-3\n3-1\n3-31\n3-32\n3-33\n3-34\n3-35\n3-36\n3-37\n3-38\n3-39\n1-2\n1-4"
-        "\n1-5\n1-6\n1-7\n2-21\n2-22\n2-23\n2-24\n2-25\n2-26\n2-27\n2-28\n");
-    REQUIRE(h.longest_chain() == 5);
+
+    REQUIRE(h.print() ==
+        "Uspeshnia-1\n1-3\n3-2\n3-31\n3-4\n3-5\n3-6\n3-7\n2-21\n31-32\n31-33\n31-34\n31-35\n31-36\n31-37\n"
+        "31-38\n31-39\n21-22\n21-23\n21-24\n21-25\n21-26\n21-27\n21-28\n");
+    REQUIRE(h.longest_chain() == 6);
     REQUIRE(h.num_employees() == 25);
     REQUIRE(h.num_subordinates(TheBoss) == 1);
-    REQUIRE(h.manager("1") == "3");
-    REQUIRE(h.num_subordinates("3") == 10);
+    REQUIRE(h.manager("3") == "1");
+    REQUIRE(h.manager("2") == "3");
+    REQUIRE(h.num_subordinates("21") == 7);
+    REQUIRE(h.num_subordinates("3") == 6);
 }
 
 
