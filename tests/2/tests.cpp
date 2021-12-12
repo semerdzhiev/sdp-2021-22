@@ -1,8 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
 
-//#include "interface.h"
-#include "Hierarchy.h"
+#include "interface.h"
 
 const string TheBoss = "Uspeshnia";
 
