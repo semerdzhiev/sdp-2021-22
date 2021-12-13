@@ -1,5 +1,7 @@
 # Графи - представяния, свойства. BFS. DFS.
 
+[Запис](https://drive.google.com/file/d/1Oz3FbygwvD_jGZucadvyP-_jpcsgQqsB/view?usp=sharing)
+
 ## Графи
 
 **G = (V, E)** - граф `G` е наредена двойка, където `V` е множество от върхове (vertices), а `E` - множество от ребра (edges). 
