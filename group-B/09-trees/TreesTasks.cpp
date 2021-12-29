@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <queue>
+#include <set>
 #include <map>
 
 // Memory leak detection define and libraries
@@ -29,11 +30,27 @@ void printPreorder( const BTreeNode* root );
 void printPostorder( const BTreeNode* root );
 void eraseTree( BTreeNode*& root );
 
+// Task 2
+bool isValidBST( const BTreeNode* root );
+
+// Task 3
+template<class Function>
+void treeMap( BTreeNode* root, Function f );
+
 // Task 4
 void trim( BTreeNode*& root );
 
+// Task 5
+void bloom( BTreeNode* root );
+
 // Get node with min property in BST
-BTreeNode* getMinBST( BTreeNode* bstRoot );
+const BTreeNode* getMinBST( const BTreeNode* bstRoot );
+
+// Get node with max property in BST
+const BTreeNode* getMaxBST( const BTreeNode* bstRoot );
+
+// Task 6
+bool allFromBSTInRange( const BTreeNode* root, int rangeFrom, int rangeTo );
 
 // Basic general tree node structure
 struct TreeNode
@@ -54,6 +71,12 @@ int branchingFactor( const TreeNode* root );
 
 // Task 9
 void printLevel( const TreeNode* root, unsigned level );
+
+// Task 10
+int leafCount( const TreeNode* root );
+
+// Task 11
+void printOrdered( const std::vector<int> vecNums );
 
 //------------------------------------------------------------------------------
 int main()
@@ -206,6 +229,37 @@ void eraseTree( BTreeNode*& root )
     root = nullptr;
 }
 
+bool isBSTInner( const BTreeNode* pNode, int min, int max )
+{
+    if ( !pNode )
+        return true;
+
+    if ( pNode->fData < min || pNode->fData > max )
+        return false;
+
+    return isBSTInner( pNode->fpLeft    , min           , pNode->fData  )
+        && isBSTInner( pNode->fpRight   , pNode->fData  , max           );
+}
+
+bool isValidBST( const BTreeNode* root )
+{
+    using   IntLimits   = std::numeric_limits<int>;
+    return isBSTInner( root, IntLimits::min(), IntLimits::max() );
+}
+
+template<class Function>
+void treeMap( BTreeNode* root, Function func )
+{
+    if ( !root )
+        return;
+
+    root->fData = func( root->fData );
+
+    treeMap( root->fpLeft, func );
+    treeMap( root->fpRight, func );
+}
+
+
 void trim( BTreeNode*& root )
 {
     if ( !root )
@@ -223,7 +277,32 @@ void trim( BTreeNode*& root )
     }
 }
 
-BTreeNode* getMinBST( BTreeNode* root )
+bool isLeaf( const BTreeNode* pNode )
+{
+    if ( !pNode )
+        return false;
+
+    return !pNode->fpLeft && !pNode->fpRight;
+}
+
+void bloom( BTreeNode* root )
+{
+    if ( !root )
+        return;
+
+    if ( isLeaf( root ) )
+    {
+        root->fpLeft    = new BTreeNode( root->fData );
+        root->fpRight   = new BTreeNode( root->fData );
+    }
+    else
+    {
+        bloom( root->fpLeft );
+        bloom( root->fpRight );
+    }
+}
+
+const BTreeNode* getMinBST( const BTreeNode* root )
 {
     if ( !root )
         return nullptr;
@@ -232,6 +311,23 @@ BTreeNode* getMinBST( BTreeNode* root )
         return getMinBST( root->fpLeft );
 
     return root;
+}
+
+const BTreeNode* getMaxBST( const BTreeNode* root )
+{
+    if ( !root )
+        return nullptr;
+
+    if ( root->fpRight )
+        return getMaxBST( root->fpRight );
+
+    return root;
+}
+
+bool allFromBSTInRange( const BTreeNode* root, int rangeFrom, int rangeTo )
+{
+    return getMinBST( root )->fData >= rangeFrom
+        && getMaxBST( root )->fData <= rangeTo;
 }
 
 //------------------------------------------------------------------------------
@@ -325,4 +421,29 @@ void printLevel( const TreeNode* root, unsigned level )
     {
         std::cout << root->fData << ' ';
     }
+}
+
+int leafCount( const TreeNode* root )
+{
+    if ( !root )
+        return 0;
+
+    if ( root->fChildren.empty() )
+        return 1;
+
+    int res = 0;
+    for ( const TreeNode* child : root->fChildren )
+        res += leafCount( child );
+
+    return res;
+}
+
+void printOrdered( const std::vector<int> vecNums )
+{
+    // BST construction in O( N*log(N) ) time and O( N ) additional memory
+    std::set<int>   orderedSet( vecNums.begin(), vecNums.end() );
+
+    // Linear traversal
+    for ( int num : orderedSet )
+        std::cout << num << " ";
 }
