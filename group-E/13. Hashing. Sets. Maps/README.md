@@ -2,6 +2,7 @@
 
 ## Хеширане
 Хеширането е преобразуване на данни с произволна големина до данни с фиксирана големина, което се случва посредством хеш-функция. Входните данни се наричат ключове, а изходните - хешове.
+
 <img src="https://cryptobook.nakov.com/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-LhlOQMrG9bRiqWpegM0%2Fuploads%2Fgit-blob-117671d5576ceee0211790605de60e2c17219521%2Fcrypto-hash-function.jpg?alt=media" alt="hash-function" width="400"/>
 
 ### Колизии и справяне с тях
