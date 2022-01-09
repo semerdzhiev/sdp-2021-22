@@ -1,60 +1,75 @@
-#include <vector>
+#include "graph.hpp"
+#include <queue>
 #include <stdexcept>
+#include <vector>
 
-class graph
+graph::graph(unsigned int n) : adj_list{n}, size{n} {}
+
+void graph::add_edge(unsigned int from, unsigned int to)
 {
-public:
-    graph() = default;
-    graph(unsigned int n) : adj_list(n), n(n)
+    if (from > adj_list.size() || to > adj_list.size())
     {
+        throw std::out_of_range("Too large vertex index");
     }
-    void add_edge(int v1, int v2)
-    {
-        if (v1 >= n || v2 >= n)
-        {
-            throw std::out_of_range("Vertex index out of range");
-        }
-        // 1 2
-        adj_list[v1].push_back(v2);
-        adj_list[v2].push_back(v1);
-    }
-    bool is_connected() const
-    {
-        bool flag = false;
-        std::vector<bool> visited(n, false);
-        for (int i = 0; i < n; i++)
-        {
-            if (!visited[i])
-            {
-                if (flag)
-                {
-                    return false;
-                }
-                else
-                {
-                    dfs(i, visited);
-                    flag = true;
-                }
-            }
-        }
-        return true;
-    }
+    adj_list[from].push_back(to);
+    // undirected graph
+    // adj_list[to][from] = 1;
+}
 
-private:
-    std::vector<std::vector<int>> adj_list{};
-    void bfs()
+bool graph::is_connected() const
+{
+    std::vector<bool> visited(size);
+    bool flag = false;
+    for (unsigned int i = 0; i < size; i++)
     {
+        if (!visited[i])
+        {
+            if (flag)
+            {
+                return false;
+            }
+            dfs(i, visited);
+            flag = true;
+        }
     }
-    void dfs(int vertex, std::vector<bool> &visited) const
+    return true;
+}
+
+int graph::min_distance_from_to(unsigned int from, unsigned int to) const
+{
+    std::vector<int> dist(size);
+    std::vector<bool> visited(size);
+    std::queue<int> bfs_queue{};
+    bfs_queue.push(from);
+    dist[from] = 0;
+    visited[from] = 1;
+    while (!bfs_queue.empty())
     {
-        for (int adj : adj_list[vertex])
+        int current = bfs_queue.front();
+        bfs_queue.pop();
+        for (int adj : adj_list[current])
         {
             if (!visited[adj])
             {
+                bfs_queue.push(adj);
+                dist[adj] = dist[current] + 1;
                 visited[adj] = true;
-                dfs(adj, visited);
             }
         }
     }
-    unsigned int n{};
-};
+    if (!visited[to])
+        return -1;
+    return dist[to];
+}
+
+void graph::dfs(unsigned int vertex, std::vector<bool> &visited) const
+{
+    for (int adj : adj_list[vertex])
+    {
+        if (!visited[adj])
+        {
+            visited[adj] = true;
+            dfs(adj, visited);
+        }
+    }
+}
