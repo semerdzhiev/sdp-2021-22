@@ -139,12 +139,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="A.cpp" />
     <ClCompile Include="LinearProbingHashSet.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SeparateChainingHashMap.cpp" />
     <ClCompile Include="SeparateChainingHashSet.cpp" />
+    <ClCompile Include="A.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LinearProbingHashSet.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="SeparateChainingHashMap.h" />
     <ClInclude Include="Set.h" />
     <ClInclude Include="SeparateChainingHashSet.h" />
   </ItemGroup>

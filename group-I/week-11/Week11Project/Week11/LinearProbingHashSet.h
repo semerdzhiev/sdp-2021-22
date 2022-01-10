@@ -7,7 +7,7 @@
 
 using namespace std;
 
-class LinearProbingHashSet : Set {
+class LinearProbingHashSet {
     int volume;
     int remainingFree;
 

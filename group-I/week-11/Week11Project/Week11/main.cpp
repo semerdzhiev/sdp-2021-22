@@ -1,15 +1,17 @@
 #include <iostream>
+#include "A.h"
 #include "SeparateChainingHashSet.h"
 #include "LinearProbingHashSet.h"
+#include "SeparateChainingHashMap.h"
 using namespace std;
 
 int main() {
-    LinearProbingHashSet h(131);
-    for (int i = 0; i < 260; i+=2)
+    SeparateChainingHashMap m(20);
+    for (int i = 0; i < 10; i++)
     {
-        h.add(i);
+        m.add(i*i, A(1, i*4));
     }
-    h.print();
+    m.print();
 
     return 0;
 }
