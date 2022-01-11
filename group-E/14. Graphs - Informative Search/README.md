@@ -1,4 +1,5 @@
 # Графи - Информирани алгоритми
+[Запис](https://drive.google.com/file/d/1Pf2gD-TstxwcW7RzTwcrCpG7zGUpAvkO/view?usp=sharing)
 
 <img src="https://i.ibb.co/4ZvCXzL/image.png" width="800px">
 
