@@ -1,5 +1,7 @@
 # Сортиращи алгоритми
 
+[Запис](https://drive.google.com/file/d/1YljHeeru6RJcA80HRlcHoaAIqQdHN7Gm/view?usp=sharing)
+
 ## Елементарни сортиращи алгоритми - О(n^2)
 - selection
 - bubble
